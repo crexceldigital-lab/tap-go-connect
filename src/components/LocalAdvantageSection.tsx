@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 
-const tags = ["Swahili + English", "M-Pesa Ready", "Offline QR", "Local Support"];
+const tags = ["Swahili + English", "Payment Intergration", "Offline QR", "Local Support"];
 
 const LocalAdvantageSection = () => (
   <section className="section-padding bg-card">
