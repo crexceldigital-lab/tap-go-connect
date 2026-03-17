@@ -170,18 +170,25 @@ const CardEditor = () => {
               <Check size={16} /> Your card is live!
             </div>
             <div className="flex items-center gap-2">
-              <button className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-card border border-border text-xs font-medium">
+              <button onClick={async () => { await navigator.clipboard.writeText(`${window.location.origin}/card/${slug}`); toast({ title: "Link copied!" }); }} className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-card border border-border text-xs font-medium hover:bg-secondary transition-colors">
                 <Link2 size={12} />Copy Link
               </button>
-              <button className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-card border border-border text-xs font-medium">
+              <button onClick={() => setShareOpen(true)} className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-card border border-border text-xs font-medium hover:bg-secondary transition-colors">
                 <QrCode size={12} />QR Code
               </button>
-              <button className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-card border border-border text-xs font-medium">
+              <button onClick={() => setShareOpen(true)} className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-card border border-border text-xs font-medium hover:bg-secondary transition-colors">
                 <Share2 size={12} />Share
               </button>
             </div>
           </motion.div>
         )}
+
+        <ShareModal
+          open={shareOpen}
+          onClose={() => setShareOpen(false)}
+          cardUrl={`${window.location.origin}/card/${slug}`}
+          cardName={card.card_name}
+        />
 
         <div className="grid lg:grid-cols-[1fr_340px] gap-8">
           {/* Controls */}
