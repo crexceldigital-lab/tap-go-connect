@@ -268,7 +268,7 @@ const CardEditor = () => {
                 <>
                   <div className="space-y-3">
                     <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-wider">Card Layout</h3>
-                    <OptionGroup options={[{ value: "minimal", label: "Minimal" }, { value: "bold", label: "Bold" }, { value: "corporate", label: "Corporate" }]} value={card.card_layout} onChange={v => update("card_layout", v)} />
+                    <OptionGroup options={[{ value: "minimal", label: "Minimal" }, { value: "bold", label: "Bold" }, { value: "corporate", label: "Corporate" }, { value: "modern", label: "Modern" }, { value: "cover", label: "Cover Image" }]} value={card.card_layout} onChange={v => update("card_layout", v)} />
                   </div>
                   <div className="space-y-3">
                     <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-wider">Profile Image</h3>
