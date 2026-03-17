@@ -54,8 +54,8 @@ const PublicCard = () => {
           show_book_appointment: data.show_book_appointment,
           show_navigate: data.show_navigate,
         });
-        // Increment views
-        await supabase.rpc("increment_views" as any, { card_id: data.id }).catch(() => {});
+        // Increment views (best effort)
+        try { await supabase.from("cards").update({ views_count: (data.views_count || 0) + 1 } as any).eq("id", data.id); } catch {}
       }
       setLoading(false);
     };
