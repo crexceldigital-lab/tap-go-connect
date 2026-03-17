@@ -19,12 +19,12 @@ const Navbar = () => {
       initial={{ y: -20, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.5 }}
-      className="fixed top-0 left-0 right-0 z-50 border-b border-border bg-background/80 backdrop-blur-xl"
+      className="fixed top-0 left-0 right-0 z-50 bg-card/90 backdrop-blur-xl border-b border-border"
     >
       <div className="mx-auto max-w-7xl px-4 md:px-8">
         <div className="flex h-16 items-center justify-between">
-          <a href="#" className="flex items-center gap-2">
-            <img src={logo} alt="TAP & GO" className="h-8" />
+          <a href="#" className="flex items-center">
+            <img src={logo} alt="TAP & GO" className="h-9" />
           </a>
 
           <div className="hidden md:flex items-center gap-8">
@@ -32,32 +32,28 @@ const Navbar = () => {
               <a
                 key={link.label}
                 href={link.href}
-                className="text-sm text-muted-foreground hover:text-foreground transition-colors duration-200"
+                className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors duration-200"
               >
                 {link.label}
               </a>
             ))}
           </div>
 
-          <div className="hidden md:flex items-center gap-3">
-            <a href="#pricing" className="text-sm text-muted-foreground hover:text-foreground transition-colors duration-200">
+          <div className="hidden md:flex items-center gap-4">
+            <a href="#" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
               Log In
             </a>
             <motion.a
               href="#pricing"
               whileHover={{ y: -1 }}
               whileTap={{ scale: 0.98 }}
-              className="rounded-full bg-primary px-5 py-2 text-sm font-semibold text-primary-foreground transition-colors"
+              className="brand-gradient rounded-full px-6 py-2.5 text-sm font-semibold text-primary-foreground gradient-glow transition-all duration-200"
             >
               Get Started
             </motion.a>
           </div>
 
-          <button
-            onClick={() => setIsOpen(!isOpen)}
-            className="md:hidden p-2 text-foreground"
-            aria-label="Toggle menu"
-          >
+          <button onClick={() => setIsOpen(!isOpen)} className="md:hidden p-2" aria-label="Toggle menu">
             {isOpen ? <X size={20} /> : <Menu size={20} />}
           </button>
         </div>
@@ -69,24 +65,14 @@ const Navbar = () => {
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.2 }}
-            className="md:hidden border-t border-border overflow-hidden bg-background"
+            className="md:hidden border-t border-border overflow-hidden bg-card"
           >
             <div className="px-4 py-4 space-y-3">
               {navLinks.map((link) => (
-                <a
-                  key={link.label}
-                  href={link.href}
-                  onClick={() => setIsOpen(false)}
-                  className="block text-sm text-muted-foreground hover:text-foreground py-2"
-                >
-                  {link.label}
-                </a>
+                <a key={link.label} href={link.href} onClick={() => setIsOpen(false)}
+                  className="block text-sm font-medium text-muted-foreground py-2">{link.label}</a>
               ))}
-              <a
-                href="#pricing"
-                className="block w-full rounded-full bg-primary px-5 py-3 text-center text-sm font-semibold text-primary-foreground mt-2"
-              >
+              <a href="#pricing" className="block w-full brand-gradient rounded-full px-5 py-3 text-center text-sm font-semibold text-primary-foreground mt-2">
                 Get Started
               </a>
             </div>

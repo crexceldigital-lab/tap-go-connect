@@ -40,7 +40,7 @@ const features = [
 ];
 
 const FeaturesSection = () => (
-  <section id="features" className="section-padding">
+  <section id="features" className="section-padding navy-bg">
     <div className="mx-auto max-w-7xl">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
@@ -48,8 +48,8 @@ const FeaturesSection = () => (
         viewport={{ once: true }}
         className="text-center mb-16"
       >
-        <p className="text-sm font-medium text-primary mb-3">Features</p>
-        <h2 className="text-3xl md:text-4xl lg:text-5xl font-semibold">
+        <p className="text-sm font-semibold text-brand-blue mb-3 uppercase tracking-wider">Features</p>
+        <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-primary-foreground">
           Everything you need to network smarter
         </h2>
       </motion.div>
@@ -62,21 +62,21 @@ const FeaturesSection = () => (
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: i * 0.1, ease: [0.2, 0, 0, 1] }}
-            className={`glass-card p-8 space-y-5 ${
-              feature.highlight ? "lg:col-span-2 border-primary/30" : ""
+            className={`rounded-2xl border p-8 space-y-5 transition-colors duration-300 ${
+              feature.highlight
+                ? "lg:col-span-2 border-brand-blue/40 bg-brand-navy-light"
+                : "border-primary-foreground/10 bg-primary-foreground/5 hover:border-brand-blue/30"
             }`}
           >
-            <span className="inline-block rounded-full bg-primary/10 px-3 py-1 text-xs font-medium text-primary">
+            <span className="inline-block rounded-full brand-gradient px-3 py-1 text-xs font-semibold text-primary-foreground">
               {feature.tag}
             </span>
-            <h3 className="text-xl font-semibold">{feature.title}</h3>
-            <p className="text-muted-foreground leading-relaxed max-w-[55ch]">
-              {feature.description}
-            </p>
+            <h3 className="text-xl font-bold text-primary-foreground">{feature.title}</h3>
+            <p className="text-primary-foreground/60 leading-relaxed max-w-[55ch]">{feature.description}</p>
             <div className="flex gap-3 pt-2">
               {feature.icons.map((Icon, j) => (
-                <div key={j} className="h-10 w-10 rounded-lg bg-secondary flex items-center justify-center">
-                  <Icon size={18} className="text-muted-foreground" strokeWidth={1.5} />
+                <div key={j} className="h-10 w-10 rounded-lg bg-primary-foreground/10 flex items-center justify-center">
+                  <Icon size={18} className="text-brand-blue" strokeWidth={1.5} />
                 </div>
               ))}
             </div>
