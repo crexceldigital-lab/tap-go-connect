@@ -47,6 +47,7 @@ const PublicCard = () => {
           button_shadow: data.button_shadow,
           card_layout: data.card_layout,
           font_style: data.font_style,
+          card_theme: (data as any).card_theme || "light",
           show_save_contact: data.show_save_contact,
           show_call: data.show_call,
           show_email: data.show_email,
@@ -54,7 +55,7 @@ const PublicCard = () => {
           show_book_appointment: data.show_book_appointment,
           show_navigate: data.show_navigate,
         });
-        // Increment views (best effort)
+        // Increment views
         try { await supabase.from("cards").update({ views_count: (data.views_count || 0) + 1 } as any).eq("id", data.id); } catch {}
       }
       setLoading(false);
@@ -72,16 +73,16 @@ const PublicCard = () => {
 
   if (notFound || !card) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-background gap-4">
+      <div className="min-h-screen flex flex-col items-center justify-center bg-background gap-4 px-4">
         <h1 className="text-2xl font-bold">Card not found</h1>
-        <p className="text-muted-foreground">This card may have been removed or is not published.</p>
+        <p className="text-muted-foreground text-center">This card may have been removed or is not published.</p>
       </div>
     );
   }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-background p-4">
-      <CardPreview card={card} />
+      <CardPreview card={card} interactive />
     </div>
   );
 };

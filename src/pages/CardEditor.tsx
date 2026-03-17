@@ -6,9 +6,10 @@ import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
 import CardPreview, { CardData } from "@/components/CardPreview";
 import ShareModal from "@/components/ShareModal";
+import UpgradeModal from "@/components/UpgradeModal";
 import {
   ArrowLeft, Save, Globe, Palette, Layout, Type, Image, ToggleLeft,
-  Camera, Upload, Check, QrCode, Link2, Share2
+  Camera, Upload, Check, QrCode, Link2, Share2, Sun, Moon
 } from "lucide-react";
 import logo from "@/assets/tapngo-logo.png";
 
@@ -37,6 +38,8 @@ const CardEditor = () => {
   const [published, setPublished] = useState(false);
   const [slug, setSlug] = useState("");
   const [shareOpen, setShareOpen] = useState(false);
+  const [shareCount, setShareCount] = useState(0);
+  const [upgradeOpen, setUpgradeOpen] = useState(false);
   const [card, setCard] = useState<CardData & { card_name: string }>({
     card_name: "My Card",
     full_name: "", job_title: "", company_name: "", avatar_url: "", logo_url: "", logo_position: "top",
@@ -44,7 +47,7 @@ const CardEditor = () => {
     primary_color: "#3BB0D4", secondary_color: "#1a2332",
     background_style: "gradient", profile_image_style: "circle", profile_image_border: true,
     button_style: "pill", button_fill: "fill", button_shadow: true,
-    card_layout: "minimal", font_style: "modern",
+    card_layout: "minimal", font_style: "modern", card_theme: "light",
     show_save_contact: true, show_call: true, show_email: true, show_whatsapp: true,
     show_book_appointment: false, show_navigate: false,
   });
@@ -64,12 +67,14 @@ const CardEditor = () => {
           profile_image_border: data.profile_image_border, button_style: data.button_style,
           button_fill: data.button_fill, button_shadow: data.button_shadow,
           card_layout: data.card_layout, font_style: data.font_style,
+          card_theme: (data as any).card_theme || "light",
           show_save_contact: data.show_save_contact, show_call: data.show_call,
           show_email: data.show_email, show_whatsapp: data.show_whatsapp,
           show_book_appointment: data.show_book_appointment, show_navigate: data.show_navigate,
         });
         setPublished(data.is_published);
         setSlug(data.slug || "");
+        setShareCount((data as any).share_count || 0);
       }
     });
   }, [id, user]);
@@ -90,7 +95,7 @@ const CardEditor = () => {
   const handleSave = async () => {
     if (!id) return;
     setSaving(true);
-    const { error } = await supabase.from("cards").update(card).eq("id", id);
+    const { error } = await supabase.from("cards").update(card as any).eq("id", id);
     setSaving(false);
     if (error) toast({ title: "Error saving", description: error.message, variant: "destructive" });
     else toast({ title: "Card saved!" });
@@ -100,13 +105,27 @@ const CardEditor = () => {
     if (!id || !user) return;
     setPublishing(true);
     const newSlug = slug || card.full_name.toLowerCase().replace(/\s+/g, "-") + "-" + id.slice(0, 6);
-    const { error } = await supabase.from("cards").update({ ...card, is_published: true, slug: newSlug }).eq("id", id);
+    const { error } = await supabase.from("cards").update({ ...card, is_published: true, slug: newSlug } as any).eq("id", id);
     setPublishing(false);
     if (error) toast({ title: "Error publishing", description: error.message, variant: "destructive" });
     else {
       setPublished(true);
       setSlug(newSlug);
       toast({ title: "Card published! 🎉", description: "Your digital card is now live." });
+    }
+  };
+
+  const handleShare = () => {
+    if (shareCount >= 5) {
+      setUpgradeOpen(true);
+      return;
+    }
+    setShareOpen(true);
+    // Increment share count
+    if (id) {
+      const newCount = shareCount + 1;
+      setShareCount(newCount);
+      supabase.from("cards").update({ share_count: newCount } as any).eq("id", id);
     }
   };
 
@@ -144,30 +163,31 @@ const CardEditor = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Header */}
       <header className="sticky top-0 z-50 bg-card/80 backdrop-blur-lg border-b border-border">
         <div className="max-w-7xl mx-auto px-4 md:px-8 h-14 flex items-center justify-between">
           <button onClick={() => navigate("/dashboard")} className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors">
-            <ArrowLeft size={16} />Dashboard
+            <ArrowLeft size={16} /><span className="hidden sm:inline">Dashboard</span>
           </button>
           <img src={logo} alt="TAP & GO" className="h-7 absolute left-1/2 -translate-x-1/2" />
           <div className="flex items-center gap-2">
-            <button onClick={handleSave} disabled={saving} className="flex items-center gap-1.5 px-4 py-2 rounded-full border border-border text-sm font-medium hover:bg-secondary transition-colors disabled:opacity-50">
-              <Save size={14} />{saving ? "Saving..." : "Save"}
+            <button onClick={handleSave} disabled={saving} className="flex items-center gap-1.5 px-3 sm:px-4 py-2 rounded-full border border-border text-sm font-medium hover:bg-secondary transition-colors disabled:opacity-50">
+              <Save size={14} /><span className="hidden sm:inline">{saving ? "Saving..." : "Save"}</span>
             </button>
-            <button onClick={handlePublish} disabled={publishing} className="flex items-center gap-1.5 px-4 py-2 rounded-full brand-gradient text-sm font-semibold text-primary-foreground gradient-glow disabled:opacity-50">
-              <Globe size={14} />{publishing ? "Publishing..." : published ? "Update" : "Publish"}
+            <button onClick={handlePublish} disabled={publishing} className="flex items-center gap-1.5 px-3 sm:px-4 py-2 rounded-full brand-gradient text-sm font-semibold text-primary-foreground gradient-glow disabled:opacity-50">
+              <Globe size={14} /><span className="hidden sm:inline">{publishing ? "Publishing..." : published ? "Update" : "Publish"}</span>
             </button>
           </div>
         </div>
       </header>
 
-      <div className="max-w-7xl mx-auto px-4 md:px-8 py-8">
-        {/* Published banner */}
+      <div className="max-w-7xl mx-auto px-4 md:px-8 py-6 md:py-8">
         {published && slug && (
           <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="mb-6 p-4 rounded-2xl bg-emerald-50 border border-emerald-200 flex items-center justify-between flex-wrap gap-3">
             <div className="flex items-center gap-2 text-sm text-emerald-700">
               <Check size={16} /> Your card is live!
+              {shareCount >= 3 && shareCount < 5 && (
+                <span className="text-xs text-amber-600 ml-2">({5 - shareCount} shares left)</span>
+              )}
             </div>
             <div className="flex items-center gap-2">
               <button onClick={async () => { await navigator.clipboard.writeText(`${window.location.origin}/card/${slug}`); toast({ title: "Link copied!" }); }} className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-card border border-border text-xs font-medium hover:bg-secondary transition-colors">
@@ -176,25 +196,20 @@ const CardEditor = () => {
               <button onClick={() => setShareOpen(true)} className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-card border border-border text-xs font-medium hover:bg-secondary transition-colors">
                 <QrCode size={12} />QR Code
               </button>
-              <button onClick={() => setShareOpen(true)} className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-card border border-border text-xs font-medium hover:bg-secondary transition-colors">
+              <button onClick={handleShare} className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-card border border-border text-xs font-medium hover:bg-secondary transition-colors">
                 <Share2 size={12} />Share
               </button>
             </div>
           </motion.div>
         )}
 
-        <ShareModal
-          open={shareOpen}
-          onClose={() => setShareOpen(false)}
-          cardUrl={`${window.location.origin}/card/${slug}`}
-          cardName={card.card_name}
-        />
+        <ShareModal open={shareOpen} onClose={() => setShareOpen(false)} cardUrl={`${window.location.origin}/card/${slug}`} cardName={card.card_name} />
+        <UpgradeModal open={upgradeOpen} onClose={() => setUpgradeOpen(false)} reason="You've reached your free share limit (5 shares). Upgrade to PRO for unlimited sharing." />
 
-        <div className="grid lg:grid-cols-[1fr_340px] gap-8">
+        <div className="grid lg:grid-cols-[1fr_340px] gap-6 md:gap-8">
           {/* Controls */}
           <div className="order-2 lg:order-1">
-            {/* Tabs */}
-            <div className="flex gap-1 mb-6 overflow-x-auto pb-2">
+            <div className="flex gap-1 mb-6 overflow-x-auto pb-2 -mx-4 px-4 md:mx-0 md:px-0">
               {tabs.map(t => (
                 <button key={t.id} onClick={() => setTab(t.id)}
                   className={`flex items-center gap-1.5 px-4 py-2.5 rounded-xl text-sm font-medium whitespace-nowrap transition-all ${tab === t.id ? "brand-gradient text-primary-foreground" : "bg-secondary text-foreground hover:bg-secondary/80"}`}>
@@ -203,7 +218,7 @@ const CardEditor = () => {
               ))}
             </div>
 
-            <div className="bg-card rounded-2xl p-6 border border-border card-shadow space-y-6">
+            <div className="bg-card rounded-2xl p-4 sm:p-6 border border-border card-shadow space-y-6">
               {tab === "info" && (
                 <>
                   <div className="space-y-4">
@@ -249,6 +264,24 @@ const CardEditor = () => {
 
               {tab === "colors" && (
                 <>
+                  {/* Theme toggle */}
+                  <div className="space-y-3">
+                    <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-wider">Card Theme</h3>
+                    <div className="flex gap-3">
+                      <button
+                        onClick={() => update("card_theme", "light")}
+                        className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-medium transition-all ${card.card_theme === "light" ? "brand-gradient text-primary-foreground" : "bg-secondary border border-border text-foreground hover:border-primary/30"}`}
+                      >
+                        <Sun size={16} />Light
+                      </button>
+                      <button
+                        onClick={() => update("card_theme", "dark")}
+                        className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-medium transition-all ${card.card_theme === "dark" ? "bg-slate-800 text-white border border-slate-700" : "bg-secondary border border-border text-foreground hover:border-primary/30"}`}
+                      >
+                        <Moon size={16} />Dark
+                      </button>
+                    </div>
+                  </div>
                   <div className="space-y-3">
                     <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-wider">Primary Color</h3>
                     <ColorPicker value={card.primary_color} onChange={v => update("primary_color", v)} />
