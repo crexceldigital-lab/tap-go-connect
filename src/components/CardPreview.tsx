@@ -1,4 +1,4 @@
-import { Phone, Mail, Globe, Save, MessageCircle, Calendar, MapPin } from "lucide-react";
+import { Phone, Mail, Globe, Save, MessageCircle, Calendar, MapPin, UserPlus } from "lucide-react";
 
 export interface CardData {
   full_name: string;
@@ -33,7 +33,14 @@ export interface CardData {
   show_navigate: boolean;
 }
 
-const CardPreview = ({ card, interactive }: { card: CardData; interactive?: boolean }) => {
+interface CardPreviewProps {
+  card: CardData;
+  interactive?: boolean;
+  onActionClick?: (actionType: string, href?: string) => void;
+  onConnectClick?: () => void;
+}
+
+const CardPreview = ({ card, interactive, onActionClick, onConnectClick }: CardPreviewProps) => {
   const isDark = card.card_theme === "dark";
 
   const bgStyle = card.background_style === "gradient"
@@ -65,10 +72,16 @@ const CardPreview = ({ card, interactive }: { card: CardData; interactive?: bool
 
   const initials = (card.full_name || "?").split(" ").map(n => n[0]).join("").slice(0, 2);
 
+  const actionHrefs: Record<string, string | undefined> = {
+    Call: interactive && card.phone ? `tel:${card.phone}` : undefined,
+    Email: interactive && card.email ? `mailto:${card.email}` : undefined,
+    WhatsApp: interactive && card.whatsapp ? `https://wa.me/${card.whatsapp.replace(/\D/g, "")}` : undefined,
+  };
+
   const actions = [
-    { show: card.show_call, icon: Phone, label: "Call", href: interactive && card.phone ? `tel:${card.phone}` : undefined },
-    { show: card.show_email, icon: Mail, label: "Email", href: interactive && card.email ? `mailto:${card.email}` : undefined },
-    { show: card.show_whatsapp, icon: MessageCircle, label: "WhatsApp", href: interactive && card.whatsapp ? `https://wa.me/${card.whatsapp.replace(/\D/g, "")}` : undefined },
+    { show: card.show_call, icon: Phone, label: "Call" },
+    { show: card.show_email, icon: Mail, label: "Email" },
+    { show: card.show_whatsapp, icon: MessageCircle, label: "WhatsApp" },
     { show: card.show_book_appointment, icon: Calendar, label: "Book" },
     { show: card.show_navigate, icon: MapPin, label: "Navigate" },
   ].filter(a => a.show);
@@ -76,11 +89,24 @@ const CardPreview = ({ card, interactive }: { card: CardData; interactive?: bool
   const isModern = card.card_layout === "modern";
   const isCover = card.card_layout === "cover";
 
-  const ActionWrapper = ({ href, children, className, style }: any) => {
-    if (interactive && href) {
-      return <a href={href} className={className} style={style} target="_blank" rel="noopener noreferrer">{children}</a>;
+  const handleActionClick = (label: string) => {
+    if (onActionClick) {
+      onActionClick(label.toLowerCase(), actionHrefs[label]);
+    } else if (interactive && actionHrefs[label]) {
+      window.open(actionHrefs[label], "_blank", "noopener,noreferrer");
     }
-    return <div className={className} style={style}>{children}</div>;
+  };
+
+  const handleSaveContact = () => {
+    if (onActionClick) {
+      onActionClick("save_contact");
+    }
+  };
+
+  const handleConnect = () => {
+    if (onConnectClick) {
+      onConnectClick();
+    }
   };
 
   return (
@@ -132,12 +158,13 @@ const CardPreview = ({ card, interactive }: { card: CardData; interactive?: bool
 
           {actions.length > 0 && (
             <div className={`grid ${actions.length <= 3 ? `grid-cols-${actions.length}` : "grid-cols-3"} gap-2`}>
-              {actions.map(({ icon: Icon, label, href }) => (
-                <ActionWrapper key={label} href={href}
+              {actions.map(({ icon: Icon, label }) => (
+                <div key={label}
+                  onClick={() => handleActionClick(label)}
                   className={`${isModern ? "rounded-2xl bg-white/15 backdrop-blur-sm" : `rounded-xl ${actionBg}`} py-3 flex flex-col items-center gap-1.5 cursor-pointer hover:bg-white/20 transition-colors`}>
                   <Icon size={16} className={btnTextColor} />
                   <span className={`text-[10px] ${btnTextColor}`}>{label}</span>
-                </ActionWrapper>
+                </div>
               ))}
             </div>
           )}
@@ -150,8 +177,19 @@ const CardPreview = ({ card, interactive }: { card: CardData; interactive?: bool
             </div>
           )}
 
+          {/* Let's Connect CTA */}
+          {interactive && (
+            <div
+              onClick={handleConnect}
+              className="rounded-full py-3.5 text-xs font-bold text-center cursor-pointer text-white transition-all shadow-lg hover:shadow-xl hover:scale-[1.02]"
+              style={{ background: `linear-gradient(135deg, ${card.primary_color}, ${card.primary_color}dd)` }}
+            >
+              <UserPlus size={14} className="inline mr-1.5" />Let's Connect
+            </div>
+          )}
+
           {card.show_save_contact && (
-            <div className={btnClass} style={btnBg}>
+            <div className={`${btnClass} cursor-pointer`} style={btnBg} onClick={handleSaveContact}>
               <Save size={14} className="inline mr-1.5" />Save Contact
             </div>
           )}

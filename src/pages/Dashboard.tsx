@@ -4,8 +4,9 @@ import { motion } from "framer-motion";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import UpgradeModal from "@/components/UpgradeModal";
-import ProBadge from "@/components/ProBadge";
-import { Plus, Eye, MousePointerClick, Users, Pencil, Trash2, LogOut, ScanLine, CreditCard, BarChart3, Crown } from "lucide-react";
+import LeadsSection from "@/components/LeadsSection";
+import AnalyticsPanel from "@/components/AnalyticsPanel";
+import { Plus, Eye, MousePointerClick, Users, Pencil, Trash2, LogOut, ScanLine, CreditCard, BarChart3, Crown, UserPlus } from "lucide-react";
 import logo from "@/assets/tapngo-logo.png";
 
 interface Card {
@@ -27,7 +28,7 @@ const Dashboard = () => {
   const navigate = useNavigate();
   const [cards, setCards] = useState<Card[]>([]);
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState<"cards" | "analytics" | "scanner">("cards");
+  const [activeTab, setActiveTab] = useState<"cards" | "leads" | "analytics" | "scanner">("cards");
   const [upgradeOpen, setUpgradeOpen] = useState(false);
 
   useEffect(() => {
@@ -51,7 +52,6 @@ const Dashboard = () => {
 
   const handleCreateNew = async () => {
     if (!user) return;
-    // Free plan: limit to 1 card
     if (cards.length >= 1) {
       setUpgradeOpen(true);
       return;
@@ -62,6 +62,7 @@ const Dashboard = () => {
 
   const dashTabs = [
     { id: "cards" as const, label: "My Cards", icon: CreditCard },
+    { id: "leads" as const, label: "Contacts", icon: UserPlus },
     { id: "analytics" as const, label: "Analytics", icon: BarChart3 },
     { id: "scanner" as const, label: "AI Scanner", icon: ScanLine },
   ];
@@ -103,6 +104,7 @@ const Dashboard = () => {
             ))}
           </div>
 
+          {/* Summary stats */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-10">
             {[
               { label: "Total Views", value: totalViews, icon: Eye },
@@ -119,6 +121,7 @@ const Dashboard = () => {
             ))}
           </div>
 
+          {/* Cards tab */}
           {activeTab === "cards" && (
             <>
               <div className="flex items-center justify-between mb-6">
@@ -188,46 +191,13 @@ const Dashboard = () => {
             </>
           )}
 
-          {activeTab === "analytics" && (
-            <div className="space-y-6">
-              <div className="flex items-center justify-between">
-                <h2 className="text-lg font-bold">Analytics Overview</h2>
-                <ProBadge onClick={() => setUpgradeOpen(true)} />
-              </div>
-              {cards.length === 0 ? (
-                <div className="text-center py-16 bg-card rounded-2xl border border-border">
-                  <BarChart3 size={40} className="mx-auto text-muted-foreground mb-4" />
-                  <p className="text-muted-foreground">Create and publish cards to see analytics.</p>
-                </div>
-              ) : (
-                <div className="space-y-4">
-                  {cards.map(card => (
-                    <div key={card.id} className="bg-card rounded-2xl border border-border p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                      <div>
-                        <h3 className="font-bold text-sm">{card.card_name}</h3>
-                        <p className="text-xs text-muted-foreground">{card.full_name}</p>
-                      </div>
-                      <div className="flex items-center gap-6 text-sm">
-                        <div className="text-center">
-                          <p className="font-bold">{card.views_count}</p>
-                          <p className="text-xs text-muted-foreground">Views</p>
-                        </div>
-                        <div className="text-center">
-                          <p className="font-bold">{card.taps_count}</p>
-                          <p className="text-xs text-muted-foreground">Taps</p>
-                        </div>
-                        <div className="text-center">
-                          <p className="font-bold">{card.leads_count}</p>
-                          <p className="text-xs text-muted-foreground">Leads</p>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-          )}
+          {/* Leads tab */}
+          {activeTab === "leads" && <LeadsSection />}
 
+          {/* Analytics tab */}
+          {activeTab === "analytics" && <AnalyticsPanel />}
+
+          {/* Scanner tab */}
           {activeTab === "scanner" && (
             <div className="text-center py-16 bg-card rounded-2xl border border-border">
               <ScanLine size={48} className="mx-auto text-primary mb-4" />

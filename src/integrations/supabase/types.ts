@@ -14,6 +14,47 @@ export type Database = {
   }
   public: {
     Tables: {
+      card_events: {
+        Row: {
+          card_id: string
+          city: string | null
+          country: string | null
+          created_at: string
+          device_type: string | null
+          event_type: string
+          id: string
+          visitor_id: string | null
+        }
+        Insert: {
+          card_id: string
+          city?: string | null
+          country?: string | null
+          created_at?: string
+          device_type?: string | null
+          event_type: string
+          id?: string
+          visitor_id?: string | null
+        }
+        Update: {
+          card_id?: string
+          city?: string | null
+          country?: string | null
+          created_at?: string
+          device_type?: string | null
+          event_type?: string
+          id?: string
+          visitor_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "card_events_card_id_fkey"
+            columns: ["card_id"]
+            isOneToOne: false
+            referencedRelation: "cards"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       cards: {
         Row: {
           avatar_url: string | null
@@ -148,6 +189,47 @@ export type Database = {
           whatsapp?: string | null
         }
         Relationships: []
+      }
+      leads: {
+        Row: {
+          card_id: string
+          company_name: string | null
+          created_at: string
+          email: string | null
+          full_name: string
+          id: string
+          phone: string
+          source: string
+        }
+        Insert: {
+          card_id: string
+          company_name?: string | null
+          created_at?: string
+          email?: string | null
+          full_name: string
+          id?: string
+          phone: string
+          source?: string
+        }
+        Update: {
+          card_id?: string
+          company_name?: string | null
+          created_at?: string
+          email?: string | null
+          full_name?: string
+          id?: string
+          phone?: string
+          source?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "leads_card_id_fkey"
+            columns: ["card_id"]
+            isOneToOne: false
+            referencedRelation: "cards"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       profiles: {
         Row: {
