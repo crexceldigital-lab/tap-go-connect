@@ -14,7 +14,192 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      cards: {
+        Row: {
+          avatar_url: string | null
+          background_style: string
+          button_fill: string
+          button_shadow: boolean
+          button_style: string
+          card_layout: string
+          card_name: string
+          color_theme: string
+          company_name: string | null
+          created_at: string
+          email: string | null
+          font_style: string
+          full_name: string | null
+          id: string
+          instagram: string | null
+          is_published: boolean
+          job_title: string | null
+          leads_count: number
+          linkedin: string | null
+          logo_position: string
+          logo_url: string | null
+          phone: string | null
+          primary_color: string
+          profile_image_border: boolean
+          profile_image_style: string
+          secondary_color: string
+          show_book_appointment: boolean
+          show_call: boolean
+          show_email: boolean
+          show_navigate: boolean
+          show_save_contact: boolean
+          show_whatsapp: boolean
+          slug: string | null
+          taps_count: number
+          twitter: string | null
+          updated_at: string
+          user_id: string
+          views_count: number
+          website: string | null
+          whatsapp: string | null
+        }
+        Insert: {
+          avatar_url?: string | null
+          background_style?: string
+          button_fill?: string
+          button_shadow?: boolean
+          button_style?: string
+          card_layout?: string
+          card_name?: string
+          color_theme?: string
+          company_name?: string | null
+          created_at?: string
+          email?: string | null
+          font_style?: string
+          full_name?: string | null
+          id?: string
+          instagram?: string | null
+          is_published?: boolean
+          job_title?: string | null
+          leads_count?: number
+          linkedin?: string | null
+          logo_position?: string
+          logo_url?: string | null
+          phone?: string | null
+          primary_color?: string
+          profile_image_border?: boolean
+          profile_image_style?: string
+          secondary_color?: string
+          show_book_appointment?: boolean
+          show_call?: boolean
+          show_email?: boolean
+          show_navigate?: boolean
+          show_save_contact?: boolean
+          show_whatsapp?: boolean
+          slug?: string | null
+          taps_count?: number
+          twitter?: string | null
+          updated_at?: string
+          user_id: string
+          views_count?: number
+          website?: string | null
+          whatsapp?: string | null
+        }
+        Update: {
+          avatar_url?: string | null
+          background_style?: string
+          button_fill?: string
+          button_shadow?: boolean
+          button_style?: string
+          card_layout?: string
+          card_name?: string
+          color_theme?: string
+          company_name?: string | null
+          created_at?: string
+          email?: string | null
+          font_style?: string
+          full_name?: string | null
+          id?: string
+          instagram?: string | null
+          is_published?: boolean
+          job_title?: string | null
+          leads_count?: number
+          linkedin?: string | null
+          logo_position?: string
+          logo_url?: string | null
+          phone?: string | null
+          primary_color?: string
+          profile_image_border?: boolean
+          profile_image_style?: string
+          secondary_color?: string
+          show_book_appointment?: boolean
+          show_call?: boolean
+          show_email?: boolean
+          show_navigate?: boolean
+          show_save_contact?: boolean
+          show_whatsapp?: boolean
+          slug?: string | null
+          taps_count?: number
+          twitter?: string | null
+          updated_at?: string
+          user_id?: string
+          views_count?: number
+          website?: string | null
+          whatsapp?: string | null
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          company_name: string | null
+          created_at: string
+          email: string | null
+          full_name: string | null
+          id: string
+          instagram: string | null
+          job_title: string | null
+          linkedin: string | null
+          onboarding_completed: boolean
+          phone: string | null
+          twitter: string | null
+          updated_at: string
+          user_id: string
+          website: string | null
+          whatsapp: string | null
+        }
+        Insert: {
+          avatar_url?: string | null
+          company_name?: string | null
+          created_at?: string
+          email?: string | null
+          full_name?: string | null
+          id?: string
+          instagram?: string | null
+          job_title?: string | null
+          linkedin?: string | null
+          onboarding_completed?: boolean
+          phone?: string | null
+          twitter?: string | null
+          updated_at?: string
+          user_id: string
+          website?: string | null
+          whatsapp?: string | null
+        }
+        Update: {
+          avatar_url?: string | null
+          company_name?: string | null
+          created_at?: string
+          email?: string | null
+          full_name?: string | null
+          id?: string
+          instagram?: string | null
+          job_title?: string | null
+          linkedin?: string | null
+          onboarding_completed?: boolean
+          phone?: string | null
+          twitter?: string | null
+          updated_at?: string
+          user_id?: string
+          website?: string | null
+          whatsapp?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
