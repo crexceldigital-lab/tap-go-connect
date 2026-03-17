@@ -3,33 +3,33 @@ import logo from "@/assets/tapngo-logo.png";
 const footerLinks = {
   Product: ["Features", "Pricing", "NFC Cards", "For Teams"],
   Company: ["About", "Blog", "Careers", "Contact"],
-  Support: ["Help Center", "API Docs", "Privacy Policy", "Terms"],
+  Support: ["Help Center", "API Docs", "Privacy Policy", "Terms"]
 };
 
-const FooterSection = () => (
-  <footer id="contact" className="navy-bg border-t border-primary-foreground/10 py-16 px-4 md:px-8">
+const FooterSection = () =>
+<footer id="contact" className="navy-bg border-t border-primary-foreground/10 py-16 px-4 md:px-8">
     <div className="mx-auto max-w-7xl">
       <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-10">
         <div className="space-y-4">
-          <img src={logo} alt="TAP & GO" className="h-8 brightness-0 invert" />
+          <img alt="TAP & GO" className="h-8 brightness-0 invert" src="/lovable-uploads/7a340a50-85f2-4287-8aca-87d605b49b31.png" />
           <p className="text-sm text-primary-foreground/50 max-w-[30ch]">
             The smart networking platform for African professionals and businesses.
           </p>
         </div>
-        {Object.entries(footerLinks).map(([title, links]) => (
-          <div key={title} className="space-y-4">
+        {Object.entries(footerLinks).map(([title, links]) =>
+      <div key={title} className="space-y-4">
             <h4 className="text-sm font-semibold text-primary-foreground">{title}</h4>
             <ul className="space-y-2.5">
-              {links.map((link) => (
-                <li key={link}>
+              {links.map((link) =>
+          <li key={link}>
                   <a href="#" className="text-sm text-primary-foreground/50 hover:text-primary-foreground transition-colors duration-200">
                     {link}
                   </a>
                 </li>
-              ))}
+          )}
             </ul>
           </div>
-        ))}
+      )}
       </div>
 
       <div className="mt-16 pt-8 border-t border-primary-foreground/10 flex flex-col sm:flex-row justify-between items-center gap-4">
@@ -43,7 +43,7 @@ const FooterSection = () => (
         </div>
       </div>
     </div>
-  </footer>
-);
+  </footer>;
+
 
 export default FooterSection;
