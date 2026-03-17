@@ -6,7 +6,7 @@ const DemoSection = () => {
   const [step, setStep] = useState(0);
   const [name, setName] = useState("Doctar Ulimwengu");
   const [title, setTitle] = useState("CEO");
-  const [company, setCompany] = useState("AfriTech Solutions");
+  const [company, setCompany] = useState("Revoltek Limited");
 
   return (
     <section className="section-padding bg-secondary">
