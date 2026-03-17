@@ -9,7 +9,7 @@ const cases = [
 ];
 
 const UseCasesSection = () => (
-  <section id="business" className="section-padding">
+  <section id="business" className="section-padding bg-card">
     <div className="mx-auto max-w-7xl">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
@@ -17,8 +17,8 @@ const UseCasesSection = () => (
         viewport={{ once: true }}
         className="text-center mb-16"
       >
-        <p className="text-sm font-medium text-primary mb-3">Use Cases</p>
-        <h2 className="text-3xl md:text-4xl lg:text-5xl font-semibold">
+        <p className="text-sm font-semibold brand-gradient-text mb-3 uppercase tracking-wider">Use Cases</p>
+        <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold">
           Built for every professional
         </h2>
       </motion.div>
@@ -31,12 +31,12 @@ const UseCasesSection = () => (
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: i * 0.1 }}
-            className="glass-card p-7 space-y-4 group hover:border-primary/30 transition-colors duration-200"
+            className="bg-card rounded-2xl p-7 space-y-4 card-shadow border border-border group hover:border-brand-blue/30 transition-all duration-300"
           >
-            <div className="h-12 w-12 rounded-xl bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors duration-200">
-              <item.icon size={22} className="text-primary" strokeWidth={1.5} />
+            <div className="h-12 w-12 rounded-xl brand-gradient flex items-center justify-center">
+              <item.icon size={22} className="text-primary-foreground" strokeWidth={1.5} />
             </div>
-            <h3 className="text-lg font-semibold">{item.title}</h3>
+            <h3 className="text-lg font-bold">{item.title}</h3>
             <p className="text-sm text-muted-foreground leading-relaxed">{item.description}</p>
           </motion.div>
         ))}

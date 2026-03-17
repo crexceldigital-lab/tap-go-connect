@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 
 const FinalCTASection = () => (
-  <section className="section-padding">
+  <section className="section-padding navy-bg">
     <div className="mx-auto max-w-4xl text-center space-y-8">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
@@ -9,11 +9,11 @@ const FinalCTASection = () => (
         viewport={{ once: true }}
         className="space-y-6"
       >
-        <h2 className="text-3xl md:text-4xl lg:text-5xl font-semibold">
+        <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-primary-foreground">
           Start Networking Smarter{" "}
-          <span className="gold-text">Today</span>
+          <span className="brand-gradient-text">Today</span>
         </h2>
-        <p className="text-lg text-muted-foreground max-w-[45ch] mx-auto">
+        <p className="text-lg text-primary-foreground/60 max-w-[45ch] mx-auto">
           Join thousands of professionals who are growing their network with TAP & GO.
         </p>
       </motion.div>
@@ -27,9 +27,9 @@ const FinalCTASection = () => (
       >
         <motion.a
           href="#pricing"
-          whileHover={{ y: -2, boxShadow: "0 10px 30px -5px hsl(45 60% 52% / 0.3)" }}
+          whileHover={{ y: -2 }}
           whileTap={{ scale: 0.98 }}
-          className="rounded-full bg-primary px-8 py-4 text-center font-semibold text-primary-foreground transition-all duration-200"
+          className="brand-gradient rounded-full px-8 py-4 text-center font-semibold text-primary-foreground gradient-glow transition-all duration-200"
         >
           Create Your Card Free
         </motion.a>
@@ -37,7 +37,7 @@ const FinalCTASection = () => (
           href="#contact"
           whileHover={{ y: -2 }}
           whileTap={{ scale: 0.98 }}
-          className="rounded-full border border-border px-8 py-4 text-center font-semibold text-foreground hover:bg-secondary transition-all duration-200"
+          className="rounded-full border-2 border-primary-foreground/30 px-8 py-4 text-center font-semibold text-primary-foreground hover:bg-primary-foreground/10 transition-all duration-200"
         >
           Book a Demo
         </motion.a>
