@@ -5,6 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
 import CardPreview, { CardData } from "@/components/CardPreview";
+import ShareModal from "@/components/ShareModal";
 import {
   ArrowLeft, Save, Globe, Palette, Layout, Type, Image, ToggleLeft,
   Camera, Upload, Check, QrCode, Link2, Share2
