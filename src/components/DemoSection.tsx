@@ -4,7 +4,7 @@ import { User, Briefcase, Globe, ChevronRight, CheckCircle2, Phone, Mail, Smartp
 
 const DemoSection = () => {
   const [step, setStep] = useState(0);
-  const [name, setName] = useState("Amina Salim");
+  const [name, setName] = useState("Doctar Ulimwengu");
   const [title, setTitle] = useState("CEO");
   const [company, setCompany] = useState("AfriTech Solutions");
 
