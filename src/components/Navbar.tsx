@@ -40,11 +40,11 @@ const Navbar = () => {
           </div>
 
           <div className="hidden md:flex items-center gap-4">
-            <a href="#" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
+            <a href="/auth" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
               Log In
             </a>
             <motion.a
-              href="#pricing"
+              href="/auth"
               whileHover={{ y: -1 }}
               whileTap={{ scale: 0.98 }}
               className="brand-gradient rounded-full px-6 py-2.5 text-sm font-semibold text-primary-foreground gradient-glow transition-all duration-200"
