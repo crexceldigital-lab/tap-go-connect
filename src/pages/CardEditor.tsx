@@ -5,6 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
 import CardPreview, { CardData } from "@/components/CardPreview";
+import ShareModal from "@/components/ShareModal";
 import {
   ArrowLeft, Save, Globe, Palette, Layout, Type, Image, ToggleLeft,
   Camera, Upload, Check, QrCode, Link2, Share2
@@ -35,6 +36,7 @@ const CardEditor = () => {
   const [publishing, setPublishing] = useState(false);
   const [published, setPublished] = useState(false);
   const [slug, setSlug] = useState("");
+  const [shareOpen, setShareOpen] = useState(false);
   const [card, setCard] = useState<CardData & { card_name: string }>({
     card_name: "My Card",
     full_name: "", job_title: "", company_name: "", avatar_url: "", logo_url: "", logo_position: "top",
@@ -168,18 +170,25 @@ const CardEditor = () => {
               <Check size={16} /> Your card is live!
             </div>
             <div className="flex items-center gap-2">
-              <button className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-card border border-border text-xs font-medium">
+              <button onClick={async () => { await navigator.clipboard.writeText(`${window.location.origin}/card/${slug}`); toast({ title: "Link copied!" }); }} className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-card border border-border text-xs font-medium hover:bg-secondary transition-colors">
                 <Link2 size={12} />Copy Link
               </button>
-              <button className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-card border border-border text-xs font-medium">
+              <button onClick={() => setShareOpen(true)} className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-card border border-border text-xs font-medium hover:bg-secondary transition-colors">
                 <QrCode size={12} />QR Code
               </button>
-              <button className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-card border border-border text-xs font-medium">
+              <button onClick={() => setShareOpen(true)} className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-card border border-border text-xs font-medium hover:bg-secondary transition-colors">
                 <Share2 size={12} />Share
               </button>
             </div>
           </motion.div>
         )}
+
+        <ShareModal
+          open={shareOpen}
+          onClose={() => setShareOpen(false)}
+          cardUrl={`${window.location.origin}/card/${slug}`}
+          cardName={card.card_name}
+        />
 
         <div className="grid lg:grid-cols-[1fr_340px] gap-8">
           {/* Controls */}
@@ -259,7 +268,7 @@ const CardEditor = () => {
                 <>
                   <div className="space-y-3">
                     <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-wider">Card Layout</h3>
-                    <OptionGroup options={[{ value: "minimal", label: "Minimal" }, { value: "bold", label: "Bold" }, { value: "corporate", label: "Corporate" }]} value={card.card_layout} onChange={v => update("card_layout", v)} />
+                    <OptionGroup options={[{ value: "minimal", label: "Minimal" }, { value: "bold", label: "Bold" }, { value: "corporate", label: "Corporate" }, { value: "modern", label: "Modern" }, { value: "cover", label: "Cover Image" }]} value={card.card_layout} onChange={v => update("card_layout", v)} />
                   </div>
                   <div className="space-y-3">
                     <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-wider">Profile Image</h3>

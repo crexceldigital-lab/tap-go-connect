@@ -12,6 +12,8 @@ import ResetPassword from "./pages/ResetPassword";
 import Onboarding from "./pages/Onboarding";
 import Dashboard from "./pages/Dashboard";
 import CardEditor from "./pages/CardEditor";
+import Scanner from "./pages/Scanner";
+import PublicCard from "./pages/PublicCard";
 
 const queryClient = new QueryClient();
 
@@ -29,6 +31,8 @@ const App = () => (
             <Route path="/onboarding" element={<Onboarding />} />
             <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
             <Route path="/editor/:id" element={<ProtectedRoute><CardEditor /></ProtectedRoute>} />
+            <Route path="/scanner" element={<ProtectedRoute><Scanner /></ProtectedRoute>} />
+            <Route path="/card/:slug" element={<PublicCard />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </AuthProvider>

@@ -63,10 +63,21 @@ const CardPreview = ({ card }: { card: CardData }) => {
     { show: card.show_navigate, icon: MapPin, label: "Navigate" },
   ].filter(a => a.show);
 
+  const isModern = card.card_layout === "modern";
+  const isCover = card.card_layout === "cover";
+
   return (
-    <div className="w-[300px] rounded-[32px] border border-border bg-card p-3 shadow-2xl">
-      <div className="rounded-[24px] overflow-hidden" style={bgStyle}>
-        <div className="p-6 space-y-5">
+    <div className={`w-[300px] rounded-[32px] border border-border bg-card p-3 ${isModern ? "shadow-[0_20px_60px_-15px_rgba(0,0,0,0.3)]" : "shadow-2xl"}`}>
+      <div className="rounded-[24px] overflow-hidden relative" style={bgStyle}>
+        {/* Cover layout: full-width bg image */}
+        {isCover && card.avatar_url && (
+          <div className="absolute inset-0">
+            <img src={card.avatar_url} alt="" className="h-full w-full object-cover" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
+          </div>
+        )}
+
+        <div className={`relative p-6 space-y-5 ${isCover ? "pt-28" : ""}`}>
           {/* Logo top */}
           {card.logo_url && card.logo_position === "top" && (
             <div className="flex justify-center">
@@ -75,20 +86,30 @@ const CardPreview = ({ card }: { card: CardData }) => {
           )}
 
           {/* Profile */}
-          <div className={`text-center space-y-3 ${card.card_layout === "bold" ? "pt-4" : ""}`}>
-            <div className={`mx-auto ${card.card_layout === "bold" ? "h-24 w-24" : "h-16 w-16"} ${imgRadius} overflow-hidden flex items-center justify-center ${card.profile_image_border ? "ring-2 ring-white/30" : ""}`}
-              style={{ backgroundColor: card.primary_color + "40" }}>
-              {card.avatar_url ? (
-                <img src={card.avatar_url} alt="" className="h-full w-full object-cover" />
-              ) : (
-                <span className={`${card.card_layout === "bold" ? "text-2xl" : "text-lg"} font-bold text-white`}>{initials}</span>
-              )}
+          {!isCover && (
+            <div className={`text-center space-y-3 ${card.card_layout === "bold" ? "pt-4" : ""}`}>
+              <div className={`mx-auto ${card.card_layout === "bold" ? "h-24 w-24" : isModern ? "h-20 w-20" : "h-16 w-16"} ${imgRadius} overflow-hidden flex items-center justify-center ${card.profile_image_border ? "ring-2 ring-white/30" : ""}`}
+                style={{ backgroundColor: card.primary_color + "40" }}>
+                {card.avatar_url ? (
+                  <img src={card.avatar_url} alt="" className="h-full w-full object-cover" />
+                ) : (
+                  <span className={`${card.card_layout === "bold" ? "text-2xl" : "text-lg"} font-bold text-white`}>{initials}</span>
+                )}
+              </div>
+              <div>
+                <h3 className={`text-lg text-white ${fontClass}`}>{card.full_name || "Your Name"}</h3>
+                <p className="text-sm text-white/60">{card.job_title}{card.company_name ? ` • ${card.company_name}` : ""}</p>
+              </div>
             </div>
-            <div>
-              <h3 className={`text-lg text-white ${fontClass}`}>{card.full_name || "Your Name"}</h3>
-              <p className="text-sm text-white/60">{card.job_title}{card.company_name ? ` • ${card.company_name}` : ""}</p>
+          )}
+
+          {/* Cover layout profile */}
+          {isCover && (
+            <div className="text-center space-y-2">
+              <h3 className={`text-xl text-white ${fontClass}`}>{card.full_name || "Your Name"}</h3>
+              <p className="text-sm text-white/70">{card.job_title}{card.company_name ? ` • ${card.company_name}` : ""}</p>
             </div>
-          </div>
+          )}
 
           {/* Logo center */}
           {card.logo_url && card.logo_position === "center" && (
@@ -101,7 +122,7 @@ const CardPreview = ({ card }: { card: CardData }) => {
           {actions.length > 0 && (
             <div className={`grid ${actions.length <= 3 ? `grid-cols-${actions.length}` : "grid-cols-3"} gap-2`}>
               {actions.map(({ icon: Icon, label }) => (
-                <div key={label} className="rounded-xl bg-white/10 py-2.5 flex flex-col items-center gap-1 cursor-pointer hover:bg-white/20 transition-colors">
+                <div key={label} className={`${isModern ? "rounded-2xl bg-white/15 backdrop-blur-sm" : "rounded-xl bg-white/10"} py-2.5 flex flex-col items-center gap-1 cursor-pointer hover:bg-white/20 transition-colors`}>
                   <Icon size={14} className="text-white/70" />
                   <span className="text-[10px] text-white/70">{label}</span>
                 </div>
