@@ -23,6 +23,7 @@ export type Database = {
           button_style: string
           card_layout: string
           card_name: string
+          card_theme: string
           color_theme: string
           company_name: string | null
           created_at: string
@@ -42,6 +43,7 @@ export type Database = {
           profile_image_border: boolean
           profile_image_style: string
           secondary_color: string
+          share_count: number
           show_book_appointment: boolean
           show_call: boolean
           show_email: boolean
@@ -65,6 +67,7 @@ export type Database = {
           button_style?: string
           card_layout?: string
           card_name?: string
+          card_theme?: string
           color_theme?: string
           company_name?: string | null
           created_at?: string
@@ -84,6 +87,7 @@ export type Database = {
           profile_image_border?: boolean
           profile_image_style?: string
           secondary_color?: string
+          share_count?: number
           show_book_appointment?: boolean
           show_call?: boolean
           show_email?: boolean
@@ -107,6 +111,7 @@ export type Database = {
           button_style?: string
           card_layout?: string
           card_name?: string
+          card_theme?: string
           color_theme?: string
           company_name?: string | null
           created_at?: string
@@ -126,6 +131,7 @@ export type Database = {
           profile_image_border?: boolean
           profile_image_style?: string
           secondary_color?: string
+          share_count?: number
           show_book_appointment?: boolean
           show_call?: boolean
           show_email?: boolean
