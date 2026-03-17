@@ -78,11 +78,11 @@ const HeroSection = () => {
                   </div>
                   <div className="text-center space-y-3">
                     <div className="mx-auto h-20 w-20 rounded-full brand-gradient flex items-center justify-center text-2xl font-bold text-primary-foreground">
-                      JH
+                      DU
                     </div>
                     <div>
-                      <h3 className="text-lg font-bold text-primary-foreground">Juma Hamis</h3>
-                      <p className="text-sm text-primary-foreground/60">Founder, TechTanzania</p>
+                      <h3 className="text-lg font-bold text-primary-foreground">Doctar I. Ulimwengu</h3>
+                      <p className="text-sm text-primary-foreground/60">Founder, Revoltek Limited</p>
                     </div>
                   </div>
                   <div className="grid grid-cols-3 gap-2">
