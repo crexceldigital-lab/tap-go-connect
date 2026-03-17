@@ -3,7 +3,9 @@ import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
-import { Plus, Eye, MousePointerClick, Users, Pencil, Trash2, LogOut, ScanLine, CreditCard, BarChart3 } from "lucide-react";
+import UpgradeModal from "@/components/UpgradeModal";
+import ProBadge from "@/components/ProBadge";
+import { Plus, Eye, MousePointerClick, Users, Pencil, Trash2, LogOut, ScanLine, CreditCard, BarChart3, Crown } from "lucide-react";
 import logo from "@/assets/tapngo-logo.png";
 
 interface Card {
@@ -26,6 +28,7 @@ const Dashboard = () => {
   const [cards, setCards] = useState<Card[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<"cards" | "analytics" | "scanner">("cards");
+  const [upgradeOpen, setUpgradeOpen] = useState(false);
 
   useEffect(() => {
     if (!user) return;
@@ -48,6 +51,11 @@ const Dashboard = () => {
 
   const handleCreateNew = async () => {
     if (!user) return;
+    // Free plan: limit to 1 card
+    if (cards.length >= 1) {
+      setUpgradeOpen(true);
+      return;
+    }
     const { data } = await supabase.from("cards").insert({ user_id: user.id, card_name: "New Card" }).select("id").single();
     if (data) navigate(`/editor/${data.id}`);
   };
@@ -63,12 +71,15 @@ const Dashboard = () => {
       <header className="sticky top-0 z-50 bg-card/80 backdrop-blur-lg border-b border-border">
         <div className="max-w-7xl mx-auto px-4 md:px-8 h-16 flex items-center justify-between">
           <img src={logo} alt="TAP & GO" className="h-8" />
-          <div className="flex items-center gap-3">
-            <button onClick={() => navigate("/scanner")} className="flex items-center gap-2 px-4 py-2.5 rounded-full border border-border text-sm font-medium hover:bg-secondary transition-colors">
-              <ScanLine size={16} />Scan
+          <div className="flex items-center gap-2 sm:gap-3">
+            <button onClick={() => setUpgradeOpen(true)} className="flex items-center gap-1.5 px-3 sm:px-4 py-2.5 rounded-full border border-primary/30 text-sm font-medium text-primary hover:bg-primary/5 transition-colors">
+              <Crown size={14} /><span className="hidden sm:inline">Upgrade</span>
             </button>
-            <button onClick={handleCreateNew} className="flex items-center gap-2 px-5 py-2.5 rounded-full brand-gradient text-sm font-semibold text-primary-foreground gradient-glow">
-              <Plus size={16} /> New Card
+            <button onClick={() => navigate("/scanner")} className="flex items-center gap-2 px-3 sm:px-4 py-2.5 rounded-full border border-border text-sm font-medium hover:bg-secondary transition-colors">
+              <ScanLine size={16} /><span className="hidden sm:inline">Scan</span>
+            </button>
+            <button onClick={handleCreateNew} className="flex items-center gap-2 px-4 sm:px-5 py-2.5 rounded-full brand-gradient text-sm font-semibold text-primary-foreground gradient-glow">
+              <Plus size={16} /><span className="hidden sm:inline">New Card</span>
             </button>
             <button onClick={() => { signOut(); navigate("/"); }} className="p-2 rounded-lg hover:bg-secondary text-muted-foreground transition-colors">
               <LogOut size={18} />
@@ -77,12 +88,13 @@ const Dashboard = () => {
         </div>
       </header>
 
-      <main className="max-w-7xl mx-auto px-4 md:px-8 py-10">
+      <UpgradeModal open={upgradeOpen} onClose={() => setUpgradeOpen(false)} reason="Upgrade to PRO to create unlimited cards and unlock all features." />
+
+      <main className="max-w-7xl mx-auto px-4 md:px-8 py-8 sm:py-10">
         <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
           <h1 className="text-2xl md:text-3xl font-extrabold mb-6">Dashboard</h1>
 
-          {/* Tabs */}
-          <div className="flex gap-1 mb-8 overflow-x-auto pb-2">
+          <div className="flex gap-1 mb-8 overflow-x-auto pb-2 -mx-4 px-4 md:mx-0 md:px-0">
             {dashTabs.map(t => (
               <button key={t.id} onClick={() => setActiveTab(t.id)}
                 className={`flex items-center gap-1.5 px-4 py-2.5 rounded-xl text-sm font-medium whitespace-nowrap transition-all ${activeTab === t.id ? "brand-gradient text-primary-foreground" : "bg-secondary text-foreground hover:bg-secondary/80"}`}>
@@ -91,16 +103,15 @@ const Dashboard = () => {
             ))}
           </div>
 
-          {/* Stats */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-10">
             {[
-              { label: "Total Views", value: totalViews, icon: Eye, color: "text-primary" },
-              { label: "Total Taps", value: totalTaps, icon: MousePointerClick, color: "text-primary" },
-              { label: "Leads Captured", value: totalLeads, icon: Users, color: "text-primary" },
-            ].map(({ label, value, icon: Icon, color }) => (
-              <div key={label} className="bg-card rounded-2xl p-6 border border-border card-shadow">
+              { label: "Total Views", value: totalViews, icon: Eye },
+              { label: "Total Taps", value: totalTaps, icon: MousePointerClick },
+              { label: "Leads Captured", value: totalLeads, icon: Users },
+            ].map(({ label, value, icon: Icon }) => (
+              <div key={label} className="bg-card rounded-2xl p-5 sm:p-6 border border-border card-shadow">
                 <div className="flex items-center gap-3 mb-3">
-                  <div className={`p-2 rounded-lg bg-secondary ${color}`}><Icon size={18} /></div>
+                  <div className="p-2 rounded-lg bg-secondary text-primary"><Icon size={18} /></div>
                   <span className="text-sm text-muted-foreground">{label}</span>
                 </div>
                 <p className="text-3xl font-extrabold">{value}</p>
@@ -159,13 +170,13 @@ const Dashboard = () => {
                       <div className="px-5 pb-4 flex gap-2">
                         <button
                           onClick={(e) => { e.stopPropagation(); navigate(`/editor/${card.id}`); }}
-                          className="flex-1 py-2 rounded-lg bg-secondary text-xs font-medium hover:bg-secondary/80 flex items-center justify-center gap-1"
+                          className="flex-1 py-2.5 rounded-full bg-secondary text-xs font-medium hover:bg-secondary/80 flex items-center justify-center gap-1"
                         >
                           <Pencil size={12} />Edit
                         </button>
                         <button
                           onClick={(e) => { e.stopPropagation(); handleDelete(card.id); }}
-                          className="py-2 px-3 rounded-lg bg-secondary text-xs text-destructive hover:bg-destructive/10 transition-colors"
+                          className="py-2.5 px-3 rounded-full bg-secondary text-xs text-destructive hover:bg-destructive/10 transition-colors"
                         >
                           <Trash2 size={12} />
                         </button>
@@ -179,7 +190,10 @@ const Dashboard = () => {
 
           {activeTab === "analytics" && (
             <div className="space-y-6">
-              <h2 className="text-lg font-bold">Analytics Overview</h2>
+              <div className="flex items-center justify-between">
+                <h2 className="text-lg font-bold">Analytics Overview</h2>
+                <ProBadge onClick={() => setUpgradeOpen(true)} />
+              </div>
               {cards.length === 0 ? (
                 <div className="text-center py-16 bg-card rounded-2xl border border-border">
                   <BarChart3 size={40} className="mx-auto text-muted-foreground mb-4" />
@@ -188,7 +202,7 @@ const Dashboard = () => {
               ) : (
                 <div className="space-y-4">
                   {cards.map(card => (
-                    <div key={card.id} className="bg-card rounded-2xl border border-border p-5 flex items-center justify-between">
+                    <div key={card.id} className="bg-card rounded-2xl border border-border p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                       <div>
                         <h3 className="font-bold text-sm">{card.card_name}</h3>
                         <p className="text-xs text-muted-foreground">{card.full_name}</p>

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import logo from "@/assets/tapngo-logo.png";
@@ -13,6 +14,7 @@ const navLinks = [
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const navigate = useNavigate();
 
   return (
     <motion.nav
@@ -40,17 +42,17 @@ const Navbar = () => {
           </div>
 
           <div className="hidden md:flex items-center gap-4">
-            <a href="/auth" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
+            <button onClick={() => navigate("/auth")} className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
               Log In
-            </a>
-            <motion.a
-              href="/auth"
+            </button>
+            <motion.button
+              onClick={() => navigate("/auth")}
               whileHover={{ y: -1 }}
               whileTap={{ scale: 0.98 }}
               className="brand-gradient rounded-full px-6 py-2.5 text-sm font-semibold text-primary-foreground gradient-glow transition-all duration-200"
             >
               Get Started
-            </motion.a>
+            </motion.button>
           </div>
 
           <button onClick={() => setIsOpen(!isOpen)} className="md:hidden p-2" aria-label="Toggle menu">
@@ -72,9 +74,9 @@ const Navbar = () => {
                 <a key={link.label} href={link.href} onClick={() => setIsOpen(false)}
                   className="block text-sm font-medium text-muted-foreground py-2">{link.label}</a>
               ))}
-              <a href="#pricing" className="block w-full brand-gradient rounded-full px-5 py-3 text-center text-sm font-semibold text-primary-foreground mt-2">
+              <button onClick={() => { setIsOpen(false); navigate("/auth"); }} className="block w-full brand-gradient rounded-full px-5 py-3 text-center text-sm font-semibold text-primary-foreground mt-2">
                 Get Started
-              </a>
+              </button>
             </div>
           </motion.div>
         )}
