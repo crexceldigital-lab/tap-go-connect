@@ -15,7 +15,12 @@ export const useAdmin = () => {
       return;
     }
 
-    supabase.rpc("has_role", { _user_id: user.id, _role: "admin" })
+    supabase
+      .from("user_roles" as any)
+      .select("role")
+      .eq("user_id", user.id)
+      .eq("role", "admin")
+      .maybeSingle()
       .then(({ data }) => {
         setIsAdmin(!!data);
         setLoading(false);
