@@ -9,7 +9,7 @@ import ShareModal from "@/components/ShareModal";
 import UpgradeModal from "@/components/UpgradeModal";
 import {
   ArrowLeft, Save, Globe, Palette, Layout, Type, Image, ToggleLeft,
-  Camera, Upload, Check, QrCode, Link2, Share2, Sun, Moon, Eye, EyeOff
+  Camera, Upload, Check, QrCode, Link2, Share2, Sun, Moon
 } from "lucide-react";
 import logo from "@/assets/tapngo-logo.png";
 
@@ -40,7 +40,6 @@ const CardEditor = () => {
   const [shareOpen, setShareOpen] = useState(false);
   const [shareCount, setShareCount] = useState(0);
   const [upgradeOpen, setUpgradeOpen] = useState(false);
-  const [previewOpen, setPreviewOpen] = useState(false);
   const [card, setCard] = useState<CardData & { card_name: string }>({
     card_name: "My Card",
     full_name: "", job_title: "", company_name: "", avatar_url: "", logo_url: "", logo_position: "top",
@@ -181,9 +180,9 @@ const CardEditor = () => {
         </div>
       </header>
 
-      <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-8 py-4 md:py-8">
+      <div className="max-w-7xl mx-auto px-4 md:px-8 py-6 md:py-8">
         {published && slug && (
-          <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="mb-4 md:mb-6 p-3 md:p-4 rounded-2xl bg-emerald-50 border border-emerald-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-3">
+          <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="mb-6 p-4 rounded-2xl bg-emerald-50 border border-emerald-200 flex items-center justify-between flex-wrap gap-3">
             <div className="flex items-center gap-2 text-sm text-emerald-700">
               <Check size={16} /> Your card is live!
               {shareCount >= 3 && shareCount < 5 && (
@@ -207,28 +206,10 @@ const CardEditor = () => {
         <ShareModal open={shareOpen} onClose={() => setShareOpen(false)} cardUrl={`${window.location.origin}/card/${slug}`} cardName={card.card_name} />
         <UpgradeModal open={upgradeOpen} onClose={() => setUpgradeOpen(false)} reason="You've reached your free share limit (5 shares). Upgrade to PRO for unlimited sharing." />
 
-        <div className="grid lg:grid-cols-[1fr_340px] gap-4 md:gap-8">
-          {/* Mobile Preview Toggle */}
-          <div className="lg:hidden order-1">
-            <button
-              onClick={() => setPreviewOpen(!previewOpen)}
-              className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-secondary border border-border text-sm font-medium text-foreground hover:bg-secondary/80 transition-colors"
-            >
-              {previewOpen ? <EyeOff size={16} /> : <Eye size={16} />}
-              {previewOpen ? "Hide Preview" : "Show Preview"}
-            </button>
-            {previewOpen && (
-              <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} exit={{ opacity: 0, height: 0 }} className="mt-4 flex justify-center">
-                <div className="scale-[0.75] origin-top">
-                  <CardPreview card={card} />
-                </div>
-              </motion.div>
-            )}
-          </div>
-
+        <div className="grid lg:grid-cols-[1fr_340px] gap-6 md:gap-8">
           {/* Controls */}
           <div className="order-2 lg:order-1">
-            <div className="flex gap-1 mb-4 md:mb-6 overflow-x-auto pb-2 -mx-4 px-4 md:mx-0 md:px-0 scrollbar-hide">
+            <div className="flex gap-1 mb-6 overflow-x-auto pb-2 -mx-4 px-4 md:mx-0 md:px-0">
               {tabs.map(t => (
                 <button key={t.id} onClick={() => setTab(t.id)}
                   className={`flex items-center gap-1.5 px-4 py-2.5 rounded-xl text-sm font-medium whitespace-nowrap transition-all ${tab === t.id ? "brand-gradient text-primary-foreground" : "bg-secondary text-foreground hover:bg-secondary/80"}`}>
@@ -383,8 +364,8 @@ const CardEditor = () => {
             </div>
           </div>
 
-          {/* Desktop Preview */}
-          <div className="hidden lg:flex order-2 justify-center lg:sticky lg:top-24 lg:self-start">
+          {/* Preview */}
+          <div className="order-1 lg:order-2 flex justify-center lg:sticky lg:top-24 lg:self-start">
             <motion.div key={JSON.stringify(card).slice(0, 50)} initial={{ scale: 0.95, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ duration: 0.2 }}>
               <CardPreview card={card} />
             </motion.div>
