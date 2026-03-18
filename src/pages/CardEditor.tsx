@@ -9,7 +9,7 @@ import ShareModal from "@/components/ShareModal";
 import UpgradeModal from "@/components/UpgradeModal";
 import {
   ArrowLeft, Save, Globe, Palette, Layout, Type, Image, ToggleLeft,
-  Camera, Upload, Check, QrCode, Link2, Share2, Sun, Moon
+  Camera, Upload, Check, QrCode, Link2, Share2, Sun, Moon, Eye, EyeOff
 } from "lucide-react";
 import logo from "@/assets/tapngo-logo.png";
 
