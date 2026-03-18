@@ -183,7 +183,7 @@ const CardEditor = () => {
 
       <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-8 py-4 md:py-8">
         {published && slug && (
-          <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="mb-6 p-4 rounded-2xl bg-emerald-50 border border-emerald-200 flex items-center justify-between flex-wrap gap-3">
+          <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="mb-4 md:mb-6 p-3 md:p-4 rounded-2xl bg-emerald-50 border border-emerald-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-3">
             <div className="flex items-center gap-2 text-sm text-emerald-700">
               <Check size={16} /> Your card is live!
               {shareCount >= 3 && shareCount < 5 && (
