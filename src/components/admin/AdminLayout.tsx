@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import { useLocation, Link } from "react-router-dom";
+import { useLocation, Link, useNavigate } from "react-router-dom";
 import {
   LayoutDashboard, Users, CreditCard, UserCheck, BarChart3,
   DollarSign, Crown, ScanLine, Settings, LogOut, ChevronRight
