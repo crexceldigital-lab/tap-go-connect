@@ -207,10 +207,28 @@ const CardEditor = () => {
         <ShareModal open={shareOpen} onClose={() => setShareOpen(false)} cardUrl={`${window.location.origin}/card/${slug}`} cardName={card.card_name} />
         <UpgradeModal open={upgradeOpen} onClose={() => setUpgradeOpen(false)} reason="You've reached your free share limit (5 shares). Upgrade to PRO for unlimited sharing." />
 
-        <div className="grid lg:grid-cols-[1fr_340px] gap-6 md:gap-8">
+        <div className="grid lg:grid-cols-[1fr_340px] gap-4 md:gap-8">
+          {/* Mobile Preview Toggle */}
+          <div className="lg:hidden order-1">
+            <button
+              onClick={() => setPreviewOpen(!previewOpen)}
+              className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-secondary border border-border text-sm font-medium text-foreground hover:bg-secondary/80 transition-colors"
+            >
+              {previewOpen ? <EyeOff size={16} /> : <Eye size={16} />}
+              {previewOpen ? "Hide Preview" : "Show Preview"}
+            </button>
+            {previewOpen && (
+              <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} exit={{ opacity: 0, height: 0 }} className="mt-4 flex justify-center">
+                <div className="scale-[0.75] origin-top">
+                  <CardPreview card={card} />
+                </div>
+              </motion.div>
+            )}
+          </div>
+
           {/* Controls */}
           <div className="order-2 lg:order-1">
-            <div className="flex gap-1 mb-6 overflow-x-auto pb-2 -mx-4 px-4 md:mx-0 md:px-0">
+            <div className="flex gap-1 mb-4 md:mb-6 overflow-x-auto pb-2 -mx-4 px-4 md:mx-0 md:px-0 scrollbar-hide">
               {tabs.map(t => (
                 <button key={t.id} onClick={() => setTab(t.id)}
                   className={`flex items-center gap-1.5 px-4 py-2.5 rounded-xl text-sm font-medium whitespace-nowrap transition-all ${tab === t.id ? "brand-gradient text-primary-foreground" : "bg-secondary text-foreground hover:bg-secondary/80"}`}>
