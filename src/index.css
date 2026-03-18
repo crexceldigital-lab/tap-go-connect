@@ -104,4 +104,8 @@
   .gradient-glow {
     box-shadow: 0 8px 30px -6px hsl(197 80% 55% / 0.35);
   }
+
+  .safe-area-bottom {
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
 }
