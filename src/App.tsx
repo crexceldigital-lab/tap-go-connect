@@ -22,6 +22,8 @@ import AnalyticsTab from "./pages/app/AnalyticsTab";
 import SettingsTab from "./pages/app/SettingsTab";
 
 // Admin pages
+import AdminLogin from "./pages/admin/AdminLogin";
+import { AdminProtectedRoute } from "./components/admin/AdminProtectedRoute";
 import AdminLayout from "./components/admin/AdminLayout";
 import AdminOverview from "./pages/admin/AdminOverview";
 import AdminUsers from "./pages/admin/AdminUsers";
