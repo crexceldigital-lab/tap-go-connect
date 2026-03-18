@@ -62,15 +62,16 @@ const App = () => (
             <Route path="/app/settings" element={<ProtectedRoute><MobileLayout><SettingsTab /></MobileLayout></ProtectedRoute>} />
 
             {/* Admin Routes */}
-            <Route path="/admin" element={<AdminLayout><AdminOverview /></AdminLayout>} />
-            <Route path="/admin/users" element={<AdminLayout><AdminUsers /></AdminLayout>} />
-            <Route path="/admin/cards" element={<AdminLayout><AdminCards /></AdminLayout>} />
-            <Route path="/admin/contacts" element={<AdminLayout><AdminContacts /></AdminLayout>} />
-            <Route path="/admin/analytics" element={<AdminLayout><AdminAnalytics /></AdminLayout>} />
-            <Route path="/admin/payments" element={<AdminLayout><AdminPayments /></AdminLayout>} />
-            <Route path="/admin/subscriptions" element={<AdminLayout><AdminSubscriptions /></AdminLayout>} />
-            <Route path="/admin/scanner-logs" element={<AdminLayout><AdminScannerLogs /></AdminLayout>} />
-            <Route path="/admin/settings" element={<AdminLayout><AdminSettings /></AdminLayout>} />
+            <Route path="/admin/login" element={<AdminLogin />} />
+            <Route path="/admin" element={<AdminProtectedRoute><AdminLayout><AdminOverview /></AdminLayout></AdminProtectedRoute>} />
+            <Route path="/admin/users" element={<AdminProtectedRoute><AdminLayout><AdminUsers /></AdminLayout></AdminProtectedRoute>} />
+            <Route path="/admin/cards" element={<AdminProtectedRoute><AdminLayout><AdminCards /></AdminLayout></AdminProtectedRoute>} />
+            <Route path="/admin/contacts" element={<AdminProtectedRoute><AdminLayout><AdminContacts /></AdminLayout></AdminProtectedRoute>} />
+            <Route path="/admin/analytics" element={<AdminProtectedRoute><AdminLayout><AdminAnalytics /></AdminLayout></AdminProtectedRoute>} />
+            <Route path="/admin/payments" element={<AdminProtectedRoute><AdminLayout><AdminPayments /></AdminLayout></AdminProtectedRoute>} />
+            <Route path="/admin/subscriptions" element={<AdminProtectedRoute><AdminLayout><AdminSubscriptions /></AdminLayout></AdminProtectedRoute>} />
+            <Route path="/admin/scanner-logs" element={<AdminProtectedRoute><AdminLayout><AdminScannerLogs /></AdminLayout></AdminProtectedRoute>} />
+            <Route path="/admin/settings" element={<AdminProtectedRoute><AdminLayout><AdminSettings /></AdminLayout></AdminProtectedRoute>} />
 
             <Route path="*" element={<NotFound />} />
           </Routes>
