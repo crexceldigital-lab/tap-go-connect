@@ -383,8 +383,8 @@ const CardEditor = () => {
             </div>
           </div>
 
-          {/* Preview */}
-          <div className="order-1 lg:order-2 flex justify-center lg:sticky lg:top-24 lg:self-start">
+          {/* Desktop Preview */}
+          <div className="hidden lg:flex order-2 justify-center lg:sticky lg:top-24 lg:self-start">
             <motion.div key={JSON.stringify(card).slice(0, 50)} initial={{ scale: 0.95, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ duration: 0.2 }}>
               <CardPreview card={card} />
             </motion.div>
