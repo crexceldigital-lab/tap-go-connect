@@ -14,6 +14,12 @@ import Dashboard from "./pages/Dashboard";
 import CardEditor from "./pages/CardEditor";
 import Scanner from "./pages/Scanner";
 import PublicCard from "./pages/PublicCard";
+import MobileLayout from "./components/mobile/MobileLayout";
+import CardsTab from "./pages/app/CardsTab";
+import ScannerTab from "./pages/app/ScannerTab";
+import ContactsTab from "./pages/app/ContactsTab";
+import AnalyticsTab from "./pages/app/AnalyticsTab";
+import SettingsTab from "./pages/app/SettingsTab";
 
 const queryClient = new QueryClient();
 
@@ -33,6 +39,14 @@ const App = () => (
             <Route path="/editor/:id" element={<ProtectedRoute><CardEditor /></ProtectedRoute>} />
             <Route path="/scanner" element={<ProtectedRoute><Scanner /></ProtectedRoute>} />
             <Route path="/card/:slug" element={<PublicCard />} />
+
+            {/* Mobile App Routes */}
+            <Route path="/app" element={<ProtectedRoute><MobileLayout><CardsTab /></MobileLayout></ProtectedRoute>} />
+            <Route path="/app/scanner" element={<ProtectedRoute><MobileLayout><ScannerTab /></MobileLayout></ProtectedRoute>} />
+            <Route path="/app/contacts" element={<ProtectedRoute><MobileLayout><ContactsTab /></MobileLayout></ProtectedRoute>} />
+            <Route path="/app/analytics" element={<ProtectedRoute><MobileLayout><AnalyticsTab /></MobileLayout></ProtectedRoute>} />
+            <Route path="/app/settings" element={<ProtectedRoute><MobileLayout><SettingsTab /></MobileLayout></ProtectedRoute>} />
+
             <Route path="*" element={<NotFound />} />
           </Routes>
         </AuthProvider>
