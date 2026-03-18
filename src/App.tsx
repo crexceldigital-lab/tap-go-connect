@@ -21,6 +21,18 @@ import ContactsTab from "./pages/app/ContactsTab";
 import AnalyticsTab from "./pages/app/AnalyticsTab";
 import SettingsTab from "./pages/app/SettingsTab";
 
+// Admin pages
+import AdminLayout from "./components/admin/AdminLayout";
+import AdminOverview from "./pages/admin/AdminOverview";
+import AdminUsers from "./pages/admin/AdminUsers";
+import AdminCards from "./pages/admin/AdminCards";
+import AdminContacts from "./pages/admin/AdminContacts";
+import AdminAnalytics from "./pages/admin/AdminAnalytics";
+import AdminPayments from "./pages/admin/AdminPayments";
+import AdminSubscriptions from "./pages/admin/AdminSubscriptions";
+import AdminScannerLogs from "./pages/admin/AdminScannerLogs";
+import AdminSettings from "./pages/admin/AdminSettings";
+
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -46,6 +58,17 @@ const App = () => (
             <Route path="/app/contacts" element={<ProtectedRoute><MobileLayout><ContactsTab /></MobileLayout></ProtectedRoute>} />
             <Route path="/app/analytics" element={<ProtectedRoute><MobileLayout><AnalyticsTab /></MobileLayout></ProtectedRoute>} />
             <Route path="/app/settings" element={<ProtectedRoute><MobileLayout><SettingsTab /></MobileLayout></ProtectedRoute>} />
+
+            {/* Admin Routes */}
+            <Route path="/admin" element={<AdminLayout><AdminOverview /></AdminLayout>} />
+            <Route path="/admin/users" element={<AdminLayout><AdminUsers /></AdminLayout>} />
+            <Route path="/admin/cards" element={<AdminLayout><AdminCards /></AdminLayout>} />
+            <Route path="/admin/contacts" element={<AdminLayout><AdminContacts /></AdminLayout>} />
+            <Route path="/admin/analytics" element={<AdminLayout><AdminAnalytics /></AdminLayout>} />
+            <Route path="/admin/payments" element={<AdminLayout><AdminPayments /></AdminLayout>} />
+            <Route path="/admin/subscriptions" element={<AdminLayout><AdminSubscriptions /></AdminLayout>} />
+            <Route path="/admin/scanner-logs" element={<AdminLayout><AdminScannerLogs /></AdminLayout>} />
+            <Route path="/admin/settings" element={<AdminLayout><AdminSettings /></AdminLayout>} />
 
             <Route path="*" element={<NotFound />} />
           </Routes>
