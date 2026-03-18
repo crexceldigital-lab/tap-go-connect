@@ -1,6 +1,5 @@
-import { ReactNode, useEffect } from "react";
-import { useNavigate, useLocation, Link } from "react-router-dom";
-import { useAdmin } from "@/hooks/useAdmin";
+import { ReactNode } from "react";
+import { useLocation, Link } from "react-router-dom";
 import {
   LayoutDashboard, Users, CreditCard, UserCheck, BarChart3,
   DollarSign, Crown, ScanLine, Settings, LogOut, ChevronRight
