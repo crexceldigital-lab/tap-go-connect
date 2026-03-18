@@ -181,7 +181,7 @@ const CardEditor = () => {
         </div>
       </header>
 
-      <div className="max-w-7xl mx-auto px-4 md:px-8 py-6 md:py-8">
+      <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-8 py-4 md:py-8">
         {published && slug && (
           <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="mb-6 p-4 rounded-2xl bg-emerald-50 border border-emerald-200 flex items-center justify-between flex-wrap gap-3">
             <div className="flex items-center gap-2 text-sm text-emerald-700">
