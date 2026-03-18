@@ -40,6 +40,7 @@ const CardEditor = () => {
   const [shareOpen, setShareOpen] = useState(false);
   const [shareCount, setShareCount] = useState(0);
   const [upgradeOpen, setUpgradeOpen] = useState(false);
+  const [previewOpen, setPreviewOpen] = useState(false);
   const [card, setCard] = useState<CardData & { card_name: string }>({
     card_name: "My Card",
     full_name: "", job_title: "", company_name: "", avatar_url: "", logo_url: "", logo_position: "top",
