@@ -12,7 +12,7 @@ const AdminSettings = () => {
     freeShares: 5,
     freeScans: 3,
     freeCards: 1,
-    proPrice: 9.99,
+    proPrice: 25000,
     enableScanner: true,
     enableLeadCapture: true,
     enableAppleWallet: false,

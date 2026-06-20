@@ -4,21 +4,22 @@ import { useNavigate } from "react-router-dom";
 
 const plans = [
   {
-    name: "Free",
-    price: "0",
-    description: "For individuals getting started",
-    features: ["1 digital card", "5 shares", "Basic customization", "3 AI scans", "Standard support"],
-    cta: "Get Started Free",
-    variant: "default" as const,
-  },
-  {
     name: "Pro",
-    price: "15,000",
+    price: "25,000",
     currency: "TZS",
-    period: "/mo",
-    description: "For professionals who want to grow",
-    features: ["Unlimited cards", "Unlimited sharing", "Advanced customization", "Unlimited AI scans", "Full analytics", "Priority support"],
-    cta: "Start Pro Trial",
+    period: "/year",
+    description: "For professionals and businesses who want full access to Tap & Go.",
+    features: [
+      "Unlimited Digital Cards",
+      "Unlimited Sharing",
+      "Advanced Customization",
+      "Unlimited AI Scans",
+      "Full Analytics",
+      "Priority Support",
+      "Full Access to the Tap & Go Mobile App",
+      "Access to Future Feature Updates",
+    ],
+    cta: "Subscribe Now",
     variant: "primary" as const,
     popular: true,
   },
@@ -53,7 +54,7 @@ const PricingSection = () => {
           </p>
         </motion.div>
 
-        <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+        <div className="grid sm:grid-cols-2 gap-6 max-w-4xl mx-auto justify-center">
           {plans.map((plan, i) => (
             <motion.div
               key={plan.name}

@@ -36,8 +36,8 @@ const UpgradeModal = ({ open, onClose, reason }: UpgradeModalProps) => {
           <div className="text-center">
             <div className="flex items-baseline justify-center gap-1">
               <span className="text-sm font-medium text-muted-foreground">TZS</span>
-              <span className="text-4xl font-extrabold">15,000</span>
-              <span className="text-sm text-muted-foreground">/mo</span>
+              <span className="text-4xl font-extrabold">25,000</span>
+              <span className="text-sm text-muted-foreground">/year</span>
             </div>
           </div>
 
