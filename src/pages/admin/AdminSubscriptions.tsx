@@ -4,16 +4,25 @@ import { Crown } from "lucide-react";
 
 const plans = [
   {
-    name: "Free",
-    price: "$0/mo",
-    features: ["1 digital card", "5 shares/month", "3 AI scans", "Basic analytics"],
-    badge: "Current Default",
+    name: "Pro",
+    price: "TZS 25,000/year",
+    features: [
+      "Unlimited Digital Cards",
+      "Unlimited Sharing",
+      "Advanced Customization",
+      "Unlimited AI Scans",
+      "Full Analytics",
+      "Priority Support",
+      "Full Access to Mobile App",
+      "Future Feature Updates",
+    ],
+    badge: "Premium",
   },
   {
-    name: "Pro",
-    price: "$9.99/mo",
-    features: ["Unlimited cards", "Unlimited shares", "Unlimited scans", "Advanced analytics", "Priority support"],
-    badge: "Premium",
+    name: "Business",
+    price: "Custom",
+    features: ["Everything in Pro", "Team management", "Admin dashboard", "Brand control", "API access", "Dedicated account manager"],
+    badge: "Enterprise",
   },
 ];
 
