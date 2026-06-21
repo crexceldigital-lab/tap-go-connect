@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { Briefcase, Rocket, CalendarDays, Building2 } from "lucide-react";
+import SpotlightCard from "@/components/SpotlightCard";
 
 const cases = [
   { icon: Briefcase, title: "Sales Professionals", description: "Close deals faster with instant contact sharing and lead capture at every meeting." },
@@ -25,20 +26,21 @@ const UseCasesSection = () => (
 
       <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {cases.map((item, i) => (
-          <motion.div
+          <SpotlightCard
             key={item.title}
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: i * 0.1 }}
-            className="bg-card rounded-2xl p-7 space-y-4 card-shadow border border-border group hover:border-brand-blue/30 transition-all duration-300"
+            whileHover={{ y: -4 }}
+            className="bg-card rounded-2xl p-7 space-y-4 card-shadow border border-border hover:border-brand-blue/30 transition-all duration-300"
           >
             <div className="h-12 w-12 rounded-xl brand-gradient flex items-center justify-center">
               <item.icon size={22} className="text-primary-foreground" strokeWidth={1.5} />
             </div>
             <h3 className="text-lg font-bold">{item.title}</h3>
             <p className="text-sm text-muted-foreground leading-relaxed">{item.description}</p>
-          </motion.div>
+          </SpotlightCard>
         ))}
       </div>
     </div>

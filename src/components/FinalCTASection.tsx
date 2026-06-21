@@ -5,8 +5,9 @@ const FinalCTASection = () => {
   const navigate = useNavigate();
 
   return (
-    <section className="section-padding navy-bg">
-      <div className="mx-auto max-w-4xl text-center space-y-8">
+    <section className="section-padding navy-bg grain-overlay relative overflow-hidden">
+      <div className="absolute inset-0 bg-dot-grid-light opacity-30 [mask-image:radial-gradient(ellipse_60%_60%_at_50%_50%,black,transparent)] pointer-events-none" />
+      <div className="relative mx-auto max-w-4xl text-center space-y-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}

@@ -1,9 +1,10 @@
 import { motion } from "framer-motion";
 
-const tags = ["Swahili + English", "Payment Intergration", "Offline QR", "Local Support"];
+const tags = ["Swahili + English", "Payment Integration", "Offline QR", "Local Support"];
 
 const LocalAdvantageSection = () => (
-  <section className="section-padding bg-card">
+  <section className="section-padding bg-card relative overflow-hidden">
+    <div className="absolute inset-0 bg-dot-grid opacity-50 [mask-image:radial-gradient(ellipse_50%_50%_at_50%_50%,black,transparent)] pointer-events-none" />
     <div className="relative mx-auto max-w-4xl text-center">
       <motion.div
         initial={{ opacity: 0, y: 20 }}

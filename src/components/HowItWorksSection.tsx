@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { UserPlus, Share2, TrendingUp } from "lucide-react";
+import SpotlightCard from "@/components/SpotlightCard";
 
 const steps = [
   { icon: UserPlus, title: "Create Your Profile", description: "Add your name, title, company, and social links in under 60 seconds." },
@@ -22,25 +23,27 @@ const HowItWorksSection = () => (
         </h2>
       </motion.div>
 
-      <div className="grid md:grid-cols-3 gap-8">
+      <div className="relative grid md:grid-cols-3 gap-8">
+        <div className="hidden md:block absolute top-[3.25rem] left-[16.5%] right-[16.5%] h-px border-t-2 border-dashed border-border" />
+
         {steps.map((step, i) => (
-          <motion.div
+          <SpotlightCard
             key={step.title}
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: i * 0.15, ease: [0.2, 0, 0, 1] }}
-            className="bg-card rounded-2xl p-8 space-y-5 card-shadow border border-border group hover:border-brand-blue/30 transition-colors duration-300"
+            className="bg-card rounded-2xl p-8 space-y-5 card-shadow border border-border hover:border-brand-blue/30 transition-colors duration-300"
           >
             <div className="flex items-center gap-4">
               <span className="text-sm font-bold text-muted-foreground/40">0{i + 1}</span>
-              <div className="h-12 w-12 rounded-xl brand-gradient flex items-center justify-center group-hover:gradient-glow transition-all duration-300">
+              <div className="h-12 w-12 rounded-xl brand-gradient flex items-center justify-center transition-all duration-300 group-hover:gradient-glow">
                 <step.icon size={22} className="text-primary-foreground" strokeWidth={1.5} />
               </div>
             </div>
             <h3 className="text-xl font-bold">{step.title}</h3>
             <p className="text-muted-foreground leading-relaxed">{step.description}</p>
-          </motion.div>
+          </SpotlightCard>
         ))}
       </div>
     </div>

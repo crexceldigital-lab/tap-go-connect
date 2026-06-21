@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 
 const logos = ["Vodacom", "CRDB Bank", "NMB", "Bolt", "Jumia", "Selcom"];
+const loopedLogos = [...logos, ...logos];
 
 const TrustSection = () => (
   <section className="py-16 px-4 md:px-8 bg-secondary border-y border-border">
@@ -17,13 +18,18 @@ const TrustSection = () => (
         initial={{ opacity: 0, y: 10 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
-        className="flex flex-wrap justify-center gap-x-14 gap-y-6"
+        className="marquee-row relative overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_12%,black_88%,transparent)]"
       >
-        {logos.map((name) => (
-          <span key={name} className="text-lg font-bold text-muted-foreground/30 tracking-wide uppercase">
-            {name}
-          </span>
-        ))}
+        <div className="marquee-track gap-16 pr-16">
+          {loopedLogos.map((name, i) => (
+            <span
+              key={`${name}-${i}`}
+              className="text-lg font-bold text-muted-foreground/40 tracking-wide uppercase whitespace-nowrap hover:text-brand-blue transition-colors duration-300"
+            >
+              {name}
+            </span>
+          ))}
+        </div>
       </motion.div>
     </div>
   </section>

@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { Wifi, QrCode, Link2, MessageCircle, UserCheck, Download, BarChart3, Users, Shield, Smartphone } from "lucide-react";
+import SpotlightCard from "@/components/SpotlightCard";
 
 const features = [
   {
@@ -40,8 +41,9 @@ const features = [
 ];
 
 const FeaturesSection = () => (
-  <section id="features" className="section-padding navy-bg">
-    <div className="mx-auto max-w-7xl">
+  <section id="features" className="section-padding navy-bg grain-overlay relative">
+    <div className="absolute inset-0 bg-dot-grid-light opacity-30 pointer-events-none" />
+    <div className="mx-auto max-w-7xl relative z-[1]">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -56,7 +58,7 @@ const FeaturesSection = () => (
 
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
         {features.map((feature, i) => (
-          <motion.div
+          <SpotlightCard
             key={feature.tag}
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -80,7 +82,7 @@ const FeaturesSection = () => (
                 </div>
               ))}
             </div>
-          </motion.div>
+          </SpotlightCard>
         ))}
       </div>
     </div>

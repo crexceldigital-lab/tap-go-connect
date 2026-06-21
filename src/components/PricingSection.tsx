@@ -1,10 +1,11 @@
 import { motion } from "framer-motion";
-import { Check } from "lucide-react";
+import { Check, Sparkles, Building2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 const plans = [
   {
     name: "Pro",
+    icon: Sparkles,
     price: "25,000",
     currency: "TZS",
     period: "/year",
@@ -25,6 +26,7 @@ const plans = [
   },
   {
     name: "Business",
+    icon: Building2,
     price: "Custom",
     description: "For teams and enterprises",
     features: ["Everything in Pro", "Team management", "Admin dashboard", "Brand control", "API access", "Dedicated account manager"],
@@ -64,22 +66,26 @@ const PricingSection = () => {
               transition={{ delay: i * 0.1 }}
               className={`relative rounded-2xl p-8 space-y-6 border transition-all duration-300 ${
                 plan.variant === "primary"
-                  ? "border-brand-blue card-shadow-lg bg-card"
+                  ? "glow-border border-transparent card-shadow-lg bg-card"
                   : "border-border bg-card card-shadow"
               }`}
-              style={plan.variant === "primary" ? {
-                boxShadow: "0 0 0 1px hsl(197 80% 55% / 0.3), 0 8px 40px -8px hsl(197 80% 55% / 0.2)"
-              } : undefined}
             >
               {plan.popular && (
                 <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full brand-gradient px-4 py-1 text-xs font-semibold text-primary-foreground">
                   Most Popular
                 </span>
               )}
-              <div>
-                <h3 className="text-lg font-bold">{plan.name}</h3>
-                <p className="text-sm mt-1 text-muted-foreground">{plan.description}</p>
+              <div className="flex items-center gap-3">
+                <div className={`h-10 w-10 rounded-xl flex items-center justify-center shrink-0 ${
+                  plan.variant === "primary" ? "brand-gradient" : "bg-secondary"
+                }`}>
+                  <plan.icon size={18} className={plan.variant === "primary" ? "text-primary-foreground" : "text-foreground"} strokeWidth={1.5} />
+                </div>
+                <div>
+                  <h3 className="text-lg font-bold">{plan.name}</h3>
+                </div>
               </div>
+              <p className="text-sm text-muted-foreground">{plan.description}</p>
               <div className="flex items-baseline gap-1">
                 {plan.currency && <span className="text-sm font-medium text-muted-foreground">{plan.currency}</span>}
                 <span className="text-4xl font-extrabold">{plan.price}</span>

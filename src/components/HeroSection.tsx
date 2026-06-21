@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Smartphone, Wifi, Mail, Phone } from "lucide-react";
+import { Smartphone, Wifi, Mail, Phone, Sparkles, ShieldCheck, Zap } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 const HeroSection = () => {
@@ -7,6 +7,7 @@ const HeroSection = () => {
 
   return (
     <section className="relative min-h-screen flex items-center section-padding pt-32 overflow-hidden bg-card">
+      <div className="absolute inset-0 bg-dot-grid opacity-60 [mask-image:radial-gradient(ellipse_70%_60%_at_50%_0%,black,transparent)] pointer-events-none" />
       <div className="absolute top-20 right-0 w-[500px] h-[500px] rounded-full bg-brand-sky/60 blur-[100px] pointer-events-none" />
       <div className="absolute bottom-0 left-0 w-[400px] h-[400px] rounded-full bg-brand-sky/40 blur-[120px] pointer-events-none" />
 
@@ -51,15 +52,19 @@ const HeroSection = () => {
               </motion.a>
             </div>
 
-            <div className="flex items-center gap-6 pt-2 text-sm text-muted-foreground">
+            <div className="flex flex-wrap items-center gap-x-6 gap-y-3 pt-2 text-sm text-muted-foreground">
               <span className="flex items-center gap-2">
-                <span className="h-2 w-2 rounded-full bg-green-500" />
+                <Zap size={14} className="text-brand-blue" />
                 No app required
               </span>
-              <span className="hidden sm:inline">•</span>
-              <span className="hidden sm:inline">Free forever plan</span>
-              <span className="hidden sm:inline">•</span>
-              <span className="hidden sm:inline">Setup in 60s</span>
+              <span className="flex items-center gap-2">
+                <Sparkles size={14} className="text-brand-blue" />
+                Free forever plan
+              </span>
+              <span className="flex items-center gap-2">
+                <ShieldCheck size={14} className="text-brand-blue" />
+                Setup in 60s
+              </span>
             </div>
           </motion.div>
 
@@ -111,7 +116,8 @@ const HeroSection = () => {
                 </div>
               </div>
               <div className="absolute -top-3 -right-3">
-                <div className="h-12 w-12 rounded-full brand-gradient animate-pulse flex items-center justify-center gradient-glow">
+                <span className="absolute inset-0 rounded-full brand-gradient animate-ping opacity-40" />
+                <div className="relative h-12 w-12 rounded-full brand-gradient flex items-center justify-center gradient-glow">
                   <Smartphone size={18} className="text-primary-foreground" />
                 </div>
               </div>
