@@ -105,7 +105,6 @@ export type Database = {
           show_whatsapp: boolean
           slug: string | null
           snapchat: string | null
-          social_display_style: string
           social_icons: Json
           taps_count: number
           telegram: string | null
@@ -168,7 +167,6 @@ export type Database = {
           show_whatsapp?: boolean
           slug?: string | null
           snapchat?: string | null
-          social_display_style?: string
           social_icons?: Json
           taps_count?: number
           telegram?: string | null
@@ -231,7 +229,6 @@ export type Database = {
           show_whatsapp?: boolean
           slug?: string | null
           snapchat?: string | null
-          social_display_style?: string
           social_icons?: Json
           taps_count?: number
           telegram?: string | null
