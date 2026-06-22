@@ -62,6 +62,22 @@ const Auth = () => {
     }
   };
 
+  const handleOAuth = async (provider: "google" | "apple") => {
+    setLoading(true);
+    const result = await lovable.auth.signInWithOAuth(provider, {
+      redirect_uri: window.location.origin,
+    });
+    setLoading(false);
+    if (result.error) {
+      toast({ title: `${provider} sign-in failed`, description: String(result.error), variant: "destructive" });
+    } else if (result.redirected) {
+      // Browser will redirect — nothing more to do
+      return;
+    } else {
+      navigate("/dashboard");
+    }
+  };
+
   return (
     <div className="min-h-screen bg-background flex items-center justify-center px-4">
       <motion.div
