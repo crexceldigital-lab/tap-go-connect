@@ -23,57 +23,56 @@ const PublicCard = () => {
     if (!slug) return;
     const fetchCard = async () => {
       const { data, error } = await supabase
-        .from("cards")
-        .select("*")
-        .eq("slug", slug)
-        .eq("is_published", true)
-        .single();
+        .rpc("get_public_card_by_slug" as any, { _slug: slug })
+        .maybeSingle();
 
-      if (error || !data) {
+      const row: any = data;
+      if (error || !row) {
         setNotFound(true);
       } else {
-        setCardId(data.id);
+        setCardId(row.id);
         setCard({
-          full_name: data.full_name || "",
-          job_title: data.job_title || "",
-          company_name: data.company_name || "",
-          avatar_url: data.avatar_url || "",
-          logo_url: data.logo_url || "",
-          logo_position: data.logo_position,
-          phone: data.phone || "",
-          email: data.email || "",
-          website: data.website || "",
-          instagram: data.instagram || "",
-          linkedin: data.linkedin || "",
-          twitter: data.twitter || "",
-          whatsapp: data.whatsapp || "",
-          primary_color: data.primary_color,
-          secondary_color: data.secondary_color,
-          background_style: data.background_style,
-          profile_image_style: data.profile_image_style,
-          profile_image_border: data.profile_image_border,
-          button_style: data.button_style,
-          button_fill: data.button_fill,
-          button_shadow: data.button_shadow,
-          card_layout: data.card_layout,
-          font_style: data.font_style,
-          card_theme: (data as any).card_theme || "light",
-          show_save_contact: data.show_save_contact,
-          show_call: data.show_call,
-          show_email: data.show_email,
-          show_whatsapp: data.show_whatsapp,
-          show_book_appointment: data.show_book_appointment,
-          show_navigate: data.show_navigate,
+          full_name: row.full_name || "",
+          job_title: row.job_title || "",
+          company_name: row.company_name || "",
+          avatar_url: row.avatar_url || "",
+          logo_url: row.logo_url || "",
+          logo_position: row.logo_position,
+          phone: row.phone || "",
+          email: row.email || "",
+          website: row.website || "",
+          instagram: row.instagram || "",
+          linkedin: row.linkedin || "",
+          twitter: row.twitter || "",
+          whatsapp: row.whatsapp || "",
+          primary_color: row.primary_color,
+          secondary_color: row.secondary_color,
+          background_style: row.background_style,
+          profile_image_style: row.profile_image_style,
+          profile_image_border: row.profile_image_border,
+          button_style: row.button_style,
+          button_fill: row.button_fill,
+          button_shadow: row.button_shadow,
+          card_layout: row.card_layout,
+          font_style: row.font_style,
+          card_theme: row.card_theme || "light",
+          show_save_contact: row.show_save_contact,
+          show_call: row.show_call,
+          show_email: row.show_email,
+          show_whatsapp: row.show_whatsapp,
+          show_book_appointment: row.show_book_appointment,
+          show_navigate: row.show_navigate,
         });
-        // Increment views
+        // Increment views via controlled RPC
         try {
-          await supabase.from("cards").update({ views_count: (data.views_count || 0) + 1 } as any).eq("id", data.id);
+          await supabase.rpc("increment_card_view" as any, { _card_id: row.id });
         } catch {}
       }
       setLoading(false);
     };
     fetchCard();
   }, [slug]);
+
 
   // Track page view once card is loaded
   useEffect(() => {
