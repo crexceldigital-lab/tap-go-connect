@@ -10,11 +10,7 @@ import UpgradeModal from "@/components/UpgradeModal";
 import {
   ArrowLeft, Save, Globe, Palette, Layout, Type, Image, ToggleLeft,
   Camera, Upload, Check, QrCode, Link2, Share2, Sun, Moon, Sparkles,
-<<<<<<< HEAD
   AtSign, Paperclip, Plus, Trash2, FileText, FileUp
-=======
-  AtSign, Paperclip, Plus, Trash2, FileText
->>>>>>> dd343628e0a3826546811d7be466519d4f5f36e1
 } from "lucide-react";
 import { parseVCard, looksLikeVCard } from "@/lib/vcard";
 import { cardThemes } from "@/data/cardThemes";
@@ -78,11 +74,7 @@ const CardEditor = () => {
     secondary_phone: "", secondary_email: "",
     facebook: "", tiktok: "", youtube: "", github: "", behance: "", dribbble: "",
     telegram: "", snapchat: "", threads: "",
-<<<<<<< HEAD
     custom_links: [], attachments: [], social_icons: {}, social_display_style: "icons",
-=======
-    custom_links: [], attachments: [], social_icons: {},
->>>>>>> dd343628e0a3826546811d7be466519d4f5f36e1
     primary_color: "#3BB0D4", secondary_color: "#1a2332",
     background_style: "gradient", profile_image_style: "circle", profile_image_border: true,
     button_style: "pill", button_fill: "fill", button_shadow: true,
@@ -111,10 +103,7 @@ const CardEditor = () => {
           custom_links: ((data as any).custom_links as CustomLink[]) || [],
           attachments: ((data as any).attachments as CardAttachment[]) || [],
           social_icons: ((data as any).social_icons as Record<string, string>) || {},
-<<<<<<< HEAD
           social_display_style: ((data as any).social_display_style as "icons" | "buttons" | "compact") || "icons",
-=======
->>>>>>> dd343628e0a3826546811d7be466519d4f5f36e1
           primary_color: data.primary_color, secondary_color: data.secondary_color,
           background_style: data.background_style, profile_image_style: data.profile_image_style,
           profile_image_border: data.profile_image_border, button_style: data.button_style,
@@ -155,7 +144,6 @@ const CardEditor = () => {
     update(field, urlData.publicUrl);
   };
 
-<<<<<<< HEAD
   const handleVCardImport = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -177,8 +165,6 @@ const CardEditor = () => {
     e.target.value = "";
   };
 
-=======
->>>>>>> dd343628e0a3826546811d7be466519d4f5f36e1
   const [uploadingFile, setUploadingFile] = useState(false);
   const handleAttachmentUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -459,7 +445,6 @@ const CardEditor = () => {
               {tab === "social" && (
                 <>
                   <div className="space-y-3">
-<<<<<<< HEAD
                     <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-wider">Display Style</h3>
                     <p className="text-xs text-muted-foreground">How your social links appear on the card.</p>
                     <OptionGroup
@@ -474,8 +459,6 @@ const CardEditor = () => {
                   </div>
 
                   <div className="space-y-3 border-t border-border pt-5">
-=======
->>>>>>> dd343628e0a3826546811d7be466519d4f5f36e1
                     <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-wider">Social Links</h3>
                     <p className="text-xs text-muted-foreground">Tap the icon to pick a custom one. Leave blank to hide.</p>
                     {SOCIAL_FIELDS.map(({ key, label, placeholder }) => (
