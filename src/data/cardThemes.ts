@@ -12,6 +12,7 @@ export interface CardTheme {
     button_style: "pill" | "rounded" | "square";
     button_fill: "fill" | "outline";
     font_style: "modern" | "bold";
+    social_display_style?: "icons" | "buttons" | "compact";
   };
 }
 
@@ -102,6 +103,52 @@ export const cardThemes: CardTheme[] = [
       primary_color: "#92400e", secondary_color: "#f5f1e8",
       card_layout: "minimal", profile_image_style: "rounded",
       button_style: "rounded", button_fill: "fill", font_style: "modern",
+    },
+  },
+  {
+    id: "pure-minimal",
+    name: "Pure Minimal",
+    description: "White card, bold black buttons — clean and confident",
+    settings: {
+      card_theme: "light", background_style: "solid",
+      primary_color: "#14161A", secondary_color: "#ffffff",
+      card_layout: "minimal", profile_image_style: "circle",
+      button_style: "pill", button_fill: "fill", font_style: "modern",
+      social_display_style: "buttons",
+    },
+  },
+  {
+    id: "slate-cover",
+    name: "Slate Cover",
+    description: "Full-bleed photo with a professional slate overlay",
+    settings: {
+      card_theme: "light", background_style: "gradient",
+      primary_color: "#0ea5e9", secondary_color: "#0f172a",
+      card_layout: "cover", profile_image_style: "circle",
+      button_style: "pill", button_fill: "fill", font_style: "modern",
+      social_display_style: "icons",
+    },
+  },
+  {
+    id: "coral-pop",
+    name: "Coral Pop",
+    description: "Energetic and friendly, great for creative roles",
+    settings: {
+      card_theme: "light", background_style: "gradient",
+      primary_color: "#fb7185", secondary_color: "#f97316",
+      card_layout: "bold", profile_image_style: "circle",
+      button_style: "rounded", button_fill: "fill", font_style: "bold",
+    },
+  },
+  {
+    id: "royal-indigo",
+    name: "Royal Indigo",
+    description: "Rich and distinguished, a strong executive feel",
+    settings: {
+      card_theme: "dark", background_style: "gradient",
+      primary_color: "#818cf8", secondary_color: "#312e81",
+      card_layout: "corporate", profile_image_style: "rounded",
+      button_style: "rounded", button_fill: "outline", font_style: "modern",
     },
   },
 ];

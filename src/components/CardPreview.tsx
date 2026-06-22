@@ -1,4 +1,19 @@
-import { Phone, Mail, Globe, Save, MessageCircle, Calendar, MapPin, UserPlus } from "lucide-react";
+import { Phone, Mail, Globe, Save, MessageCircle, Calendar, MapPin, UserPlus, Instagram, Linkedin, Twitter, Facebook, Youtube, Github, Send as TelegramIcon, Ghost, AtSign, Music2, Palette, Dribbble, Paperclip, Download } from "lucide-react";
+import { getIconComponent } from "./IconPicker";
+
+export interface CustomLink {
+  label: string;
+  url: string;
+  icon?: string;
+}
+
+export interface CardAttachment {
+  label: string;
+  url: string;
+  filename: string;
+  size?: number;
+  type?: string;
+}
 
 export interface CardData {
   full_name: string;
@@ -10,10 +25,29 @@ export interface CardData {
   phone: string;
   email: string;
   website: string;
+  bio?: string;
+  address?: string;
+  department?: string;
+  pronouns?: string;
+  secondary_phone?: string;
+  secondary_email?: string;
   instagram: string;
   linkedin: string;
   twitter: string;
   whatsapp: string;
+  facebook?: string;
+  tiktok?: string;
+  youtube?: string;
+  github?: string;
+  behance?: string;
+  dribbble?: string;
+  telegram?: string;
+  snapchat?: string;
+  threads?: string;
+  custom_links?: CustomLink[];
+  attachments?: CardAttachment[];
+  social_icons?: Record<string, string>;
+  social_display_style?: "icons" | "buttons" | "compact";
   primary_color: string;
   secondary_color: string;
   background_style: string;
@@ -32,6 +66,23 @@ export interface CardData {
   show_book_appointment: boolean;
   show_navigate: boolean;
 }
+
+const SOCIAL_DEFS: { key: keyof CardData; label: string; icon: any; href: (v: string) => string }[] = [
+  { key: "instagram", label: "Instagram", icon: Instagram, href: (v) => (v.startsWith("http") ? v : `https://instagram.com/${v.replace(/^@/, "")}`) },
+  { key: "linkedin", label: "LinkedIn", icon: Linkedin, href: (v) => (v.startsWith("http") ? v : `https://linkedin.com/in/${v}`) },
+  { key: "twitter", label: "Twitter / X", icon: Twitter, href: (v) => (v.startsWith("http") ? v : `https://x.com/${v.replace(/^@/, "")}`) },
+  { key: "facebook", label: "Facebook", icon: Facebook, href: (v) => (v.startsWith("http") ? v : `https://facebook.com/${v}`) },
+  { key: "tiktok", label: "TikTok", icon: Music2, href: (v) => (v.startsWith("http") ? v : `https://tiktok.com/@${v.replace(/^@/, "")}`) },
+  { key: "youtube", label: "YouTube", icon: Youtube, href: (v) => (v.startsWith("http") ? v : `https://youtube.com/@${v.replace(/^@/, "")}`) },
+  { key: "github", label: "GitHub", icon: Github, href: (v) => (v.startsWith("http") ? v : `https://github.com/${v}`) },
+  { key: "behance", label: "Behance", icon: Palette, href: (v) => (v.startsWith("http") ? v : `https://behance.net/${v}`) },
+  { key: "dribbble", label: "Dribbble", icon: Dribbble, href: (v) => (v.startsWith("http") ? v : `https://dribbble.com/${v}`) },
+  { key: "telegram", label: "Telegram", icon: TelegramIcon, href: (v) => (v.startsWith("http") ? v : `https://t.me/${v.replace(/^@/, "")}`) },
+  { key: "snapchat", label: "Snapchat", icon: Ghost, href: (v) => (v.startsWith("http") ? v : `https://snapchat.com/add/${v.replace(/^@/, "")}`) },
+  { key: "threads", label: "Threads", icon: AtSign, href: (v) => (v.startsWith("http") ? v : `https://threads.net/@${v.replace(/^@/, "")}`) },
+];
+
+
 
 interface CardPreviewProps {
   card: CardData;
@@ -212,11 +263,133 @@ const CardPreview = ({ card, interactive, onActionClick, onConnectClick }: CardP
             </div>
           )}
 
+          {card.bio && (
+            <p className={`text-xs text-center leading-relaxed ${subtextColor}`}>{card.bio}</p>
+          )}
+
+          {card.address && (
+            <div className={`flex items-start gap-2 text-xs ${subtextColor}`}>
+              <MapPin size={12} className="mt-0.5 shrink-0" />
+              <span>{card.address}</span>
+            </div>
+          )}
+
+          {(() => {
+            const socials = SOCIAL_DEFS
+              .map((s) => ({ ...s, value: (card as any)[s.key] as string | undefined }))
+              .filter((s) => s.value && s.value.trim().length > 0);
+            if (socials.length === 0) return null;
+            const mode = card.social_display_style || "icons";
+
+            if (mode === "buttons") {
+              return (
+                <div className="space-y-2">
+                  {socials.map(({ key, label, icon: DefaultIcon, href, value }) => {
+                    const override = card.social_icons?.[key as string];
+                    const Icon = override ? getIconComponent(override) : DefaultIcon;
+                    const content = (
+                      <>
+                        <Icon size={14} />
+                        <span>{label}</span>
+                      </>
+                    );
+                    return interactive ? (
+                      <a key={key as string} href={href(value!)} target="_blank" rel="noopener noreferrer" className={`${btnClass} flex items-center justify-center gap-2`} style={btnBg}>{content}</a>
+                    ) : (
+                      <div key={key as string} className={`${btnClass} flex items-center justify-center gap-2`} style={btnBg}>{content}</div>
+                    );
+                  })}
+                </div>
+              );
+            }
+
+            if (mode === "compact") {
+              return (
+                <div className={`rounded-xl ${actionBg} divide-y ${isLightSurface ? "divide-slate-900/10" : "divide-white/10"} overflow-hidden`}>
+                  {socials.map(({ key, label, icon: DefaultIcon, href, value }) => {
+                    const override = card.social_icons?.[key as string];
+                    const Icon = override ? getIconComponent(override) : DefaultIcon;
+                    const content = (
+                      <>
+                        <Icon size={13} className={btnTextColor} />
+                        <span className={`text-xs flex-1 ${textColor}`}>{label}</span>
+                        <span className={`text-[10px] ${subtextColor} truncate max-w-[90px]`}>{value}</span>
+                      </>
+                    );
+                    return interactive ? (
+                      <a key={key as string} href={href(value!)} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 px-3 py-2 hover:bg-black/5 transition-colors">{content}</a>
+                    ) : (
+                      <div key={key as string} className="flex items-center gap-2 px-3 py-2">{content}</div>
+                    );
+                  })}
+                </div>
+              );
+            }
+
+            // default: icons-only
+            return (
+              <div className="flex flex-wrap gap-2 justify-center">
+                {socials.map(({ key, icon: DefaultIcon, href, value }) => {
+                  const override = card.social_icons?.[key as string];
+                  const Icon = override ? getIconComponent(override) : DefaultIcon;
+                  const node = (
+                    <Icon size={14} className={btnTextColor} />
+                  );
+                  const className = `h-9 w-9 rounded-full ${actionBg} flex items-center justify-center hover:scale-110 transition-transform`;
+                  return interactive ? (
+                    <a key={key as string} href={href(value!)} target="_blank" rel="noopener noreferrer" className={className}>{node}</a>
+                  ) : (
+                    <div key={key as string} className={className}>{node}</div>
+                  );
+                })}
+              </div>
+            );
+          })()}
+
+          {card.custom_links && card.custom_links.length > 0 && (
+            <div className="space-y-2">
+              {card.custom_links.filter(l => l.url && l.label).map((link, i) => {
+                const Icon = getIconComponent(link.icon);
+                const className = `flex items-center gap-3 px-4 py-2.5 rounded-xl ${actionBg} ${textColor} text-xs font-medium hover:scale-[1.02] transition-transform`;
+                return interactive ? (
+                  <a key={i} href={link.url} target="_blank" rel="noopener noreferrer" className={className}>
+                    <Icon size={14} /><span className="truncate">{link.label}</span>
+                  </a>
+                ) : (
+                  <div key={i} className={className}>
+                    <Icon size={14} /><span className="truncate">{link.label}</span>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+
+          {card.attachments && card.attachments.length > 0 && (
+            <div className="space-y-2">
+              {card.attachments.filter(a => a.url).map((file, i) => {
+                const className = `flex items-center gap-3 px-4 py-2.5 rounded-xl ${actionBg} ${textColor} text-xs font-medium hover:scale-[1.02] transition-transform`;
+                const content = (
+                  <>
+                    <Paperclip size={14} className="shrink-0" />
+                    <span className="truncate flex-1">{file.label || file.filename}</span>
+                    <Download size={12} className={btnTextColor} />
+                  </>
+                );
+                return interactive ? (
+                  <a key={i} href={file.url} target="_blank" rel="noopener noreferrer" download={file.filename} className={className}>{content}</a>
+                ) : (
+                  <div key={i} className={className}>{content}</div>
+                );
+              })}
+            </div>
+          )}
+
           {card.show_save_contact && (
             <div className={`${btnClass} cursor-pointer`} style={btnBg} onClick={handleSaveContact}>
               <Save size={14} className="inline mr-1.5" />Save Contact
             </div>
           )}
+
 
           {card.logo_url && card.logo_position === "footer" && (
             <div className="flex justify-center pt-2">
