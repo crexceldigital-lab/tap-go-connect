@@ -40,8 +40,30 @@ interface CardPreviewProps {
   onConnectClick?: () => void;
 }
 
+const hexToLuminance = (hex: string) => {
+  const clean = hex.replace("#", "");
+  const full = clean.length === 3 ? clean.split("").map((c) => c + c).join("") : clean;
+  const num = parseInt(full, 16) || 0;
+  const r = (num >> 16) & 255, g = (num >> 8) & 255, b = num & 255;
+  const [rs, gs, bs] = [r, g, b].map((v) => {
+    const s = v / 255;
+    return s <= 0.03928 ? s / 12.92 : Math.pow((s + 0.055) / 1.055, 2.4);
+  });
+  return 0.2126 * rs + 0.7152 * gs + 0.0722 * bs;
+};
+
 const CardPreview = ({ card, interactive, onActionClick, onConnectClick }: CardPreviewProps) => {
   const isDark = card.card_theme === "dark";
+
+  // "Dark theme" always forces a near-black background, so white text is always safe there.
+  // In light theme, the actual chosen colors become the surface — compute real luminance
+  // so a light/white card gets dark text instead of invisible white-on-white.
+  const bgLuminance = isDark
+    ? 0
+    : card.background_style === "gradient"
+      ? (hexToLuminance(card.primary_color) + hexToLuminance(card.secondary_color)) / 2
+      : hexToLuminance(card.secondary_color);
+  const isLightSurface = !isDark && bgLuminance > 0.55;
 
   const bgStyle = card.background_style === "gradient"
     ? { background: isDark
@@ -49,10 +71,12 @@ const CardPreview = ({ card, interactive, onActionClick, onConnectClick }: CardP
         : `linear-gradient(135deg, ${card.primary_color}, ${card.secondary_color})` }
     : { backgroundColor: isDark ? "#0f172a" : card.secondary_color };
 
-  const textColor = isDark ? "text-white" : "text-white";
-  const subtextColor = isDark ? "text-white/60" : "text-white/60";
-  const btnTextColor = isDark ? "text-white/70" : "text-white/70";
-  const actionBg = isDark ? "bg-white/10" : "bg-white/10";
+  const textColor = isLightSurface ? "text-slate-900" : "text-white";
+  const subtextColor = isLightSurface ? "text-slate-500" : "text-white/60";
+  const btnTextColor = isLightSurface ? "text-slate-600" : "text-white/70";
+  const actionBg = isLightSurface ? "bg-slate-900/5" : "bg-white/10";
+  const ringColor = isLightSurface ? "ring-slate-900/15" : "ring-white/30";
+  const outlineBorder = isLightSurface ? "border-slate-900/15" : "border-white/30";
 
   const imgRadius = card.profile_image_style === "circle" ? "rounded-full"
     : card.profile_image_style === "rounded" ? "rounded-2xl" : "rounded-none";
@@ -63,7 +87,7 @@ const CardPreview = ({ card, interactive, onActionClick, onConnectClick }: CardP
   const btnClass = `${btnRadius} py-3 text-xs font-semibold text-center transition-all ${
     card.button_fill === "fill"
       ? "text-white"
-      : `border ${isDark ? "border-white/20" : "border-white/30"} text-white/90`
+      : `border ${outlineBorder} ${isLightSurface ? "text-slate-700" : "text-white/90"}`
   } ${card.button_shadow ? "shadow-lg" : ""}`;
 
   const btnBg = card.button_fill === "fill" ? { backgroundColor: card.primary_color } : {};
@@ -128,7 +152,7 @@ const CardPreview = ({ card, interactive, onActionClick, onConnectClick }: CardP
 
           {!isCover && (
             <div className={`text-center space-y-3 ${card.card_layout === "bold" ? "pt-4" : ""}`}>
-              <div className={`mx-auto ${card.card_layout === "bold" ? "h-24 w-24" : isModern ? "h-20 w-20" : "h-16 w-16"} ${imgRadius} overflow-hidden flex items-center justify-center ${card.profile_image_border ? "ring-2 ring-white/30" : ""}`}
+              <div className={`mx-auto ${card.card_layout === "bold" ? "h-24 w-24" : isModern ? "h-20 w-20" : "h-16 w-16"} ${imgRadius} overflow-hidden flex items-center justify-center ${card.profile_image_border ? `ring-2 ${ringColor}` : ""}`}
                 style={{ backgroundColor: card.primary_color + "40" }}>
                 {card.avatar_url ? (
                   <img src={card.avatar_url} alt="" className="h-full w-full object-cover" />
@@ -161,7 +185,7 @@ const CardPreview = ({ card, interactive, onActionClick, onConnectClick }: CardP
               {actions.map(({ icon: Icon, label }) => (
                 <div key={label}
                   onClick={() => handleActionClick(label)}
-                  className={`${isModern ? "rounded-2xl bg-white/15 backdrop-blur-sm" : `rounded-xl ${actionBg}`} py-3 flex flex-col items-center gap-1.5 cursor-pointer hover:bg-white/20 transition-colors`}>
+                  className={`${isModern ? `rounded-2xl backdrop-blur-sm ${isLightSurface ? "bg-slate-900/5" : "bg-white/15"}` : `rounded-xl ${actionBg}`} py-3 flex flex-col items-center gap-1.5 cursor-pointer hover:bg-white/20 transition-colors`}>
                   <Icon size={16} className={btnTextColor} />
                   <span className={`text-[10px] ${btnTextColor}`}>{label}</span>
                 </div>

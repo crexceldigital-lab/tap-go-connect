@@ -9,8 +9,9 @@ import ShareModal from "@/components/ShareModal";
 import UpgradeModal from "@/components/UpgradeModal";
 import {
   ArrowLeft, Save, Globe, Palette, Layout, Type, Image, ToggleLeft,
-  Camera, Upload, Check, QrCode, Link2, Share2, Sun, Moon
+  Camera, Upload, Check, QrCode, Link2, Share2, Sun, Moon, Sparkles
 } from "lucide-react";
+import { cardThemes } from "@/data/cardThemes";
 import logo from "@/assets/tapngo-logo.png";
 
 const colorPresets = [
@@ -20,6 +21,7 @@ const colorPresets = [
 ];
 
 const tabs = [
+  { id: "themes", label: "Themes", icon: Sparkles },
   { id: "info", label: "Info", icon: Type },
   { id: "colors", label: "Colors", icon: Palette },
   { id: "layout", label: "Layout", icon: Layout },
@@ -32,7 +34,7 @@ const CardEditor = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
-  const [tab, setTab] = useState("info");
+  const [tab, setTab] = useState("themes");
   const [saving, setSaving] = useState(false);
   const [publishing, setPublishing] = useState(false);
   const [published, setPublished] = useState(false);
@@ -80,6 +82,16 @@ const CardEditor = () => {
   }, [id, user]);
 
   const update = (key: string, value: any) => setCard((c) => ({ ...c, [key]: value }));
+
+  const applyTheme = (themeId: string) => {
+    const theme = cardThemes.find((t) => t.id === themeId);
+    if (!theme) return;
+    setCard((c) => ({ ...c, ...theme.settings }));
+  };
+
+  const activeThemeId = cardThemes.find((t) =>
+    Object.entries(t.settings).every(([key, value]) => (card as any)[key] === value)
+  )?.id;
 
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>, field: "avatar_url" | "logo_url") => {
     const file = e.target.files?.[0];
@@ -219,6 +231,44 @@ const CardEditor = () => {
             </div>
 
             <div className="bg-card rounded-2xl p-4 sm:p-6 border border-border card-shadow space-y-6">
+              {tab === "themes" && (
+                <div className="space-y-4">
+                  <div>
+                    <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-wider">Choose a Theme</h3>
+                    <p className="text-xs text-muted-foreground mt-1">Pick a starting point — you can fine-tune colors, layout, and buttons afterward.</p>
+                  </div>
+                  <div className="grid grid-cols-2 gap-4">
+                    {cardThemes.map((theme) => {
+                      const isActive = activeThemeId === theme.id;
+                      return (
+                        <button
+                          key={theme.id}
+                          onClick={() => applyTheme(theme.id)}
+                          className={`text-left rounded-2xl border-2 overflow-hidden transition-all ${
+                            isActive ? "border-primary" : "border-border hover:border-primary/40"
+                          }`}
+                        >
+                          <div className="relative h-40 bg-secondary/50 flex items-center justify-center overflow-hidden">
+                            <div className="origin-top scale-[0.42] pointer-events-none">
+                              <CardPreview card={{ ...card, ...theme.settings }} />
+                            </div>
+                            {isActive && (
+                              <div className="absolute top-2 right-2 h-6 w-6 rounded-full brand-gradient flex items-center justify-center">
+                                <Check size={13} className="text-primary-foreground" />
+                              </div>
+                            )}
+                          </div>
+                          <div className="p-3 bg-card">
+                            <p className="text-sm font-bold">{theme.name}</p>
+                            <p className="text-xs text-muted-foreground mt-0.5">{theme.description}</p>
+                          </div>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+
               {tab === "info" && (
                 <>
                   <div className="space-y-4">
