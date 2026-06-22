@@ -27,11 +27,30 @@ const colorPresets = [
 const tabs = [
   { id: "themes", label: "Themes", icon: Sparkles },
   { id: "info", label: "Info", icon: Type },
+  { id: "social", label: "Social", icon: AtSign },
+  { id: "files", label: "Files", icon: Paperclip },
   { id: "colors", label: "Colors", icon: Palette },
   { id: "layout", label: "Layout", icon: Layout },
   { id: "buttons", label: "Buttons", icon: ToggleLeft },
   { id: "logo", label: "Logo", icon: Image },
 ];
+
+const SOCIAL_FIELDS: { key: string; label: string; placeholder: string }[] = [
+  { key: "instagram", label: "Instagram", placeholder: "@username or URL" },
+  { key: "linkedin", label: "LinkedIn", placeholder: "username or URL" },
+  { key: "twitter", label: "Twitter / X", placeholder: "@username or URL" },
+  { key: "whatsapp", label: "WhatsApp", placeholder: "+255..." },
+  { key: "facebook", label: "Facebook", placeholder: "username or URL" },
+  { key: "tiktok", label: "TikTok", placeholder: "@username or URL" },
+  { key: "youtube", label: "YouTube", placeholder: "@channel or URL" },
+  { key: "github", label: "GitHub", placeholder: "username or URL" },
+  { key: "behance", label: "Behance", placeholder: "username or URL" },
+  { key: "dribbble", label: "Dribbble", placeholder: "username or URL" },
+  { key: "telegram", label: "Telegram", placeholder: "@username or URL" },
+  { key: "snapchat", label: "Snapchat", placeholder: "@username or URL" },
+  { key: "threads", label: "Threads", placeholder: "@username or URL" },
+];
+
 
 const CardEditor = () => {
   const { id } = useParams<{ id: string }>();
