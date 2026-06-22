@@ -231,6 +231,42 @@ export type Database = {
           },
         ]
       }
+      team_inquiries: {
+        Row: {
+          company_name: string
+          created_at: string
+          full_name: string
+          id: string
+          message: string | null
+          phone: string | null
+          status: string
+          team_size: string | null
+          work_email: string
+        }
+        Insert: {
+          company_name: string
+          created_at?: string
+          full_name: string
+          id?: string
+          message?: string | null
+          phone?: string | null
+          status?: string
+          team_size?: string | null
+          work_email: string
+        }
+        Update: {
+          company_name?: string
+          created_at?: string
+          full_name?: string
+          id?: string
+          message?: string | null
+          phone?: string | null
+          status?: string
+          team_size?: string | null
+          work_email?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
