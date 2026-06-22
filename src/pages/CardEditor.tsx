@@ -9,10 +9,14 @@ import ShareModal from "@/components/ShareModal";
 import UpgradeModal from "@/components/UpgradeModal";
 import {
   ArrowLeft, Save, Globe, Palette, Layout, Type, Image, ToggleLeft,
-  Camera, Upload, Check, QrCode, Link2, Share2, Sun, Moon, Sparkles
+  Camera, Upload, Check, QrCode, Link2, Share2, Sun, Moon, Sparkles,
+  AtSign, Paperclip, Plus, Trash2, FileText
 } from "lucide-react";
 import { cardThemes } from "@/data/cardThemes";
+import IconPicker from "@/components/IconPicker";
+import type { CustomLink, CardAttachment } from "@/components/CardPreview";
 import logo from "@/assets/tapngo-logo.png";
+
 
 const colorPresets = [
   "#3BB0D4", "#1a2332", "#6366f1", "#ec4899", "#f59e0b",
@@ -23,11 +27,30 @@ const colorPresets = [
 const tabs = [
   { id: "themes", label: "Themes", icon: Sparkles },
   { id: "info", label: "Info", icon: Type },
+  { id: "social", label: "Social", icon: AtSign },
+  { id: "files", label: "Files", icon: Paperclip },
   { id: "colors", label: "Colors", icon: Palette },
   { id: "layout", label: "Layout", icon: Layout },
   { id: "buttons", label: "Buttons", icon: ToggleLeft },
   { id: "logo", label: "Logo", icon: Image },
 ];
+
+const SOCIAL_FIELDS: { key: string; label: string; placeholder: string }[] = [
+  { key: "instagram", label: "Instagram", placeholder: "@username or URL" },
+  { key: "linkedin", label: "LinkedIn", placeholder: "username or URL" },
+  { key: "twitter", label: "Twitter / X", placeholder: "@username or URL" },
+  { key: "whatsapp", label: "WhatsApp", placeholder: "+255..." },
+  { key: "facebook", label: "Facebook", placeholder: "username or URL" },
+  { key: "tiktok", label: "TikTok", placeholder: "@username or URL" },
+  { key: "youtube", label: "YouTube", placeholder: "@channel or URL" },
+  { key: "github", label: "GitHub", placeholder: "username or URL" },
+  { key: "behance", label: "Behance", placeholder: "username or URL" },
+  { key: "dribbble", label: "Dribbble", placeholder: "username or URL" },
+  { key: "telegram", label: "Telegram", placeholder: "@username or URL" },
+  { key: "snapchat", label: "Snapchat", placeholder: "@username or URL" },
+  { key: "threads", label: "Threads", placeholder: "@username or URL" },
+];
+
 
 const CardEditor = () => {
   const { id } = useParams<{ id: string }>();
@@ -46,6 +69,11 @@ const CardEditor = () => {
     card_name: "My Card",
     full_name: "", job_title: "", company_name: "", avatar_url: "", logo_url: "", logo_position: "top",
     phone: "", email: "", website: "", instagram: "", linkedin: "", twitter: "", whatsapp: "",
+    bio: "", address: "", department: "", pronouns: "",
+    secondary_phone: "", secondary_email: "",
+    facebook: "", tiktok: "", youtube: "", github: "", behance: "", dribbble: "",
+    telegram: "", snapchat: "", threads: "",
+    custom_links: [], attachments: [], social_icons: {},
     primary_color: "#3BB0D4", secondary_color: "#1a2332",
     background_style: "gradient", profile_image_style: "circle", profile_image_border: true,
     button_style: "pill", button_fill: "fill", button_shadow: true,
@@ -53,6 +81,7 @@ const CardEditor = () => {
     show_save_contact: true, show_call: true, show_email: true, show_whatsapp: true,
     show_book_appointment: false, show_navigate: false,
   });
+
 
   useEffect(() => {
     if (!id || !user) return;
@@ -64,6 +93,15 @@ const CardEditor = () => {
           avatar_url: data.avatar_url || "", logo_url: data.logo_url || "", logo_position: data.logo_position,
           phone: data.phone || "", email: data.email || "", website: data.website || "",
           instagram: data.instagram || "", linkedin: data.linkedin || "", twitter: data.twitter || "", whatsapp: data.whatsapp || "",
+          bio: (data as any).bio || "", address: (data as any).address || "",
+          department: (data as any).department || "", pronouns: (data as any).pronouns || "",
+          secondary_phone: (data as any).secondary_phone || "", secondary_email: (data as any).secondary_email || "",
+          facebook: (data as any).facebook || "", tiktok: (data as any).tiktok || "", youtube: (data as any).youtube || "",
+          github: (data as any).github || "", behance: (data as any).behance || "", dribbble: (data as any).dribbble || "",
+          telegram: (data as any).telegram || "", snapchat: (data as any).snapchat || "", threads: (data as any).threads || "",
+          custom_links: ((data as any).custom_links as CustomLink[]) || [],
+          attachments: ((data as any).attachments as CardAttachment[]) || [],
+          social_icons: ((data as any).social_icons as Record<string, string>) || {},
           primary_color: data.primary_color, secondary_color: data.secondary_color,
           background_style: data.background_style, profile_image_style: data.profile_image_style,
           profile_image_border: data.profile_image_border, button_style: data.button_style,
@@ -103,6 +141,47 @@ const CardEditor = () => {
     const { data: urlData } = supabase.storage.from("avatars").getPublicUrl(path);
     update(field, urlData.publicUrl);
   };
+
+  const [uploadingFile, setUploadingFile] = useState(false);
+  const handleAttachmentUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file || !user) return;
+    if (file.size > 20 * 1024 * 1024) {
+      toast({ title: "File too large", description: "Max file size is 20MB.", variant: "destructive" });
+      return;
+    }
+    setUploadingFile(true);
+    const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, "_");
+    const path = `${user.id}/attachments/${Date.now()}-${safeName}`;
+    const { error } = await supabase.storage.from("avatars").upload(path, file, { upsert: true, contentType: file.type });
+    setUploadingFile(false);
+    if (error) { toast({ title: "Upload failed", description: error.message, variant: "destructive" }); return; }
+    const { data: urlData } = supabase.storage.from("avatars").getPublicUrl(path);
+    setCard((c) => ({
+      ...c,
+      attachments: [
+        ...(c.attachments || []),
+        { label: file.name.replace(/\.[^.]+$/, ""), url: urlData.publicUrl, filename: file.name, size: file.size, type: file.type },
+      ],
+    }));
+    e.target.value = "";
+  };
+
+  const updateAttachment = (i: number, patch: Partial<CardAttachment>) =>
+    setCard((c) => ({ ...c, attachments: (c.attachments || []).map((a, idx) => (idx === i ? { ...a, ...patch } : a)) }));
+  const removeAttachment = (i: number) =>
+    setCard((c) => ({ ...c, attachments: (c.attachments || []).filter((_, idx) => idx !== i) }));
+
+  const addCustomLink = () =>
+    setCard((c) => ({ ...c, custom_links: [...(c.custom_links || []), { label: "", url: "", icon: "Link" }] }));
+  const updateCustomLink = (i: number, patch: Partial<CustomLink>) =>
+    setCard((c) => ({ ...c, custom_links: (c.custom_links || []).map((l, idx) => (idx === i ? { ...l, ...patch } : l)) }));
+  const removeCustomLink = (i: number) =>
+    setCard((c) => ({ ...c, custom_links: (c.custom_links || []).filter((_, idx) => idx !== i) }));
+
+  const setSocialIcon = (key: string, icon: string) =>
+    setCard((c) => ({ ...c, social_icons: { ...(c.social_icons || {}), [key]: icon } }));
+
 
   const handleSave = async () => {
     if (!id) return;
@@ -288,29 +367,147 @@ const CardEditor = () => {
                     {[
                       { field: "full_name", placeholder: "Full name" },
                       { field: "job_title", placeholder: "Job title" },
+                      { field: "department", placeholder: "Department (optional)" },
+                      { field: "pronouns", placeholder: "Pronouns (e.g. she/her)" },
                       { field: "company_name", placeholder: "Company" },
-                      { field: "phone", placeholder: "Phone" },
-                      { field: "email", placeholder: "Email" },
-                      { field: "website", placeholder: "Website" },
                     ].map(({ field, placeholder }) => (
-                      <input key={field} value={(card as any)[field]} onChange={e => update(field, e.target.value)} placeholder={placeholder}
+                      <input key={field} value={(card as any)[field] || ""} onChange={e => update(field, e.target.value)} placeholder={placeholder}
                         className="w-full px-4 py-3 rounded-xl bg-secondary border border-border text-sm outline-none focus:border-primary/50" />
                     ))}
+                    <textarea
+                      value={card.bio || ""}
+                      onChange={(e) => update("bio", e.target.value)}
+                      maxLength={240}
+                      placeholder="Short bio (max 240 chars)"
+                      rows={3}
+                      className="w-full px-4 py-3 rounded-xl bg-secondary border border-border text-sm outline-none focus:border-primary/50 resize-none"
+                    />
                   </div>
+
                   <div className="space-y-4">
-                    <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-wider">Social Links</h3>
+                    <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-wider">Contact</h3>
                     {[
-                      { field: "instagram", placeholder: "Instagram" },
-                      { field: "linkedin", placeholder: "LinkedIn" },
-                      { field: "twitter", placeholder: "Twitter / X" },
-                      { field: "whatsapp", placeholder: "WhatsApp" },
+                      { field: "phone", placeholder: "Phone" },
+                      { field: "secondary_phone", placeholder: "Secondary phone (optional)" },
+                      { field: "email", placeholder: "Email" },
+                      { field: "secondary_email", placeholder: "Secondary email (optional)" },
+                      { field: "website", placeholder: "Website" },
                     ].map(({ field, placeholder }) => (
-                      <input key={field} value={(card as any)[field]} onChange={e => update(field, e.target.value)} placeholder={placeholder}
+                      <input key={field} value={(card as any)[field] || ""} onChange={e => update(field, e.target.value)} placeholder={placeholder}
                         className="w-full px-4 py-3 rounded-xl bg-secondary border border-border text-sm outline-none focus:border-primary/50" />
+                    ))}
+                    <textarea
+                      value={card.address || ""}
+                      onChange={(e) => update("address", e.target.value)}
+                      placeholder="Address / Location (optional)"
+                      rows={2}
+                      className="w-full px-4 py-3 rounded-xl bg-secondary border border-border text-sm outline-none focus:border-primary/50 resize-none"
+                    />
+                  </div>
+                </>
+              )}
+
+              {tab === "social" && (
+                <>
+                  <div className="space-y-3">
+                    <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-wider">Social Links</h3>
+                    <p className="text-xs text-muted-foreground">Tap the icon to pick a custom one. Leave blank to hide.</p>
+                    {SOCIAL_FIELDS.map(({ key, label, placeholder }) => (
+                      <div key={key} className="flex items-center gap-2">
+                        <IconPicker
+                          value={card.social_icons?.[key]}
+                          onChange={(name) => setSocialIcon(key, name)}
+                          label={`${label} icon`}
+                        />
+                        <input
+                          value={(card as any)[key] || ""}
+                          onChange={(e) => update(key, e.target.value)}
+                          placeholder={`${label} — ${placeholder}`}
+                          className="flex-1 px-4 py-2.5 rounded-xl bg-secondary border border-border text-sm outline-none focus:border-primary/50"
+                        />
+                      </div>
+                    ))}
+                  </div>
+
+                  <div className="space-y-3 border-t border-border pt-5">
+                    <div className="flex items-center justify-between">
+                      <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-wider">Custom Links</h3>
+                      <button
+                        onClick={addCustomLink}
+                        className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-secondary border border-border text-xs font-medium hover:border-primary/50 transition-colors"
+                      >
+                        <Plus size={12} />Add
+                      </button>
+                    </div>
+                    {(card.custom_links || []).length === 0 && (
+                      <p className="text-xs text-muted-foreground py-4 text-center">No custom links yet. Add any URL — Calendly, blog, store, anything.</p>
+                    )}
+                    {(card.custom_links || []).map((link, i) => (
+                      <div key={i} className="p-3 rounded-xl bg-secondary/50 border border-border space-y-2">
+                        <div className="flex items-center gap-2">
+                          <IconPicker value={link.icon} onChange={(name) => updateCustomLink(i, { icon: name })} label="Link icon" />
+                          <input
+                            value={link.label}
+                            onChange={(e) => updateCustomLink(i, { label: e.target.value })}
+                            placeholder="Label (e.g. Book a call)"
+                            className="flex-1 px-3 py-2 rounded-lg bg-card border border-border text-sm outline-none focus:border-primary/50"
+                          />
+                          <button onClick={() => removeCustomLink(i)} className="p-2 rounded-lg text-destructive hover:bg-destructive/10 transition-colors">
+                            <Trash2 size={14} />
+                          </button>
+                        </div>
+                        <input
+                          value={link.url}
+                          onChange={(e) => updateCustomLink(i, { url: e.target.value })}
+                          placeholder="https://…"
+                          className="w-full px-3 py-2 rounded-lg bg-card border border-border text-sm outline-none focus:border-primary/50"
+                        />
+                      </div>
                     ))}
                   </div>
                 </>
               )}
+
+              {tab === "files" && (
+                <div className="space-y-4">
+                  <div>
+                    <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-wider">Attachments</h3>
+                    <p className="text-xs text-muted-foreground mt-1">Add downloadable files — resume, brochure, menu, price list. Max 20MB each.</p>
+                  </div>
+
+                  <label className="flex flex-col items-center justify-center gap-2 px-4 py-8 rounded-xl border-2 border-dashed border-border hover:border-primary/50 cursor-pointer transition-colors">
+                    <Upload size={20} className="text-muted-foreground" />
+                    <span className="text-sm text-muted-foreground">
+                      {uploadingFile ? "Uploading…" : "Click to upload a file"}
+                    </span>
+                    <input type="file" onChange={handleAttachmentUpload} disabled={uploadingFile} className="hidden" />
+                  </label>
+
+                  {(card.attachments || []).map((file, i) => (
+                    <div key={i} className="p-3 rounded-xl bg-secondary/50 border border-border space-y-2">
+                      <div className="flex items-center gap-2">
+                        <div className="h-10 w-10 rounded-xl bg-card border border-border flex items-center justify-center shrink-0">
+                          <FileText size={16} className="text-primary" />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-xs font-medium truncate">{file.filename}</p>
+                          <p className="text-[10px] text-muted-foreground">{file.size ? `${(file.size / 1024).toFixed(1)} KB` : ""}</p>
+                        </div>
+                        <button onClick={() => removeAttachment(i)} className="p-2 rounded-lg text-destructive hover:bg-destructive/10 transition-colors">
+                          <Trash2 size={14} />
+                        </button>
+                      </div>
+                      <input
+                        value={file.label}
+                        onChange={(e) => updateAttachment(i, { label: e.target.value })}
+                        placeholder="Display label"
+                        className="w-full px-3 py-2 rounded-lg bg-card border border-border text-sm outline-none focus:border-primary/50"
+                      />
+                    </div>
+                  ))}
+                </div>
+              )}
+
 
               {tab === "colors" && (
                 <>
