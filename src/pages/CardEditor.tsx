@@ -142,6 +142,47 @@ const CardEditor = () => {
     update(field, urlData.publicUrl);
   };
 
+  const [uploadingFile, setUploadingFile] = useState(false);
+  const handleAttachmentUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file || !user) return;
+    if (file.size > 20 * 1024 * 1024) {
+      toast({ title: "File too large", description: "Max file size is 20MB.", variant: "destructive" });
+      return;
+    }
+    setUploadingFile(true);
+    const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, "_");
+    const path = `${user.id}/attachments/${Date.now()}-${safeName}`;
+    const { error } = await supabase.storage.from("avatars").upload(path, file, { upsert: true, contentType: file.type });
+    setUploadingFile(false);
+    if (error) { toast({ title: "Upload failed", description: error.message, variant: "destructive" }); return; }
+    const { data: urlData } = supabase.storage.from("avatars").getPublicUrl(path);
+    setCard((c) => ({
+      ...c,
+      attachments: [
+        ...(c.attachments || []),
+        { label: file.name.replace(/\.[^.]+$/, ""), url: urlData.publicUrl, filename: file.name, size: file.size, type: file.type },
+      ],
+    }));
+    e.target.value = "";
+  };
+
+  const updateAttachment = (i: number, patch: Partial<CardAttachment>) =>
+    setCard((c) => ({ ...c, attachments: (c.attachments || []).map((a, idx) => (idx === i ? { ...a, ...patch } : a)) }));
+  const removeAttachment = (i: number) =>
+    setCard((c) => ({ ...c, attachments: (c.attachments || []).filter((_, idx) => idx !== i) }));
+
+  const addCustomLink = () =>
+    setCard((c) => ({ ...c, custom_links: [...(c.custom_links || []), { label: "", url: "", icon: "Link" }] }));
+  const updateCustomLink = (i: number, patch: Partial<CustomLink>) =>
+    setCard((c) => ({ ...c, custom_links: (c.custom_links || []).map((l, idx) => (idx === i ? { ...l, ...patch } : l)) }));
+  const removeCustomLink = (i: number) =>
+    setCard((c) => ({ ...c, custom_links: (c.custom_links || []).filter((_, idx) => idx !== i) }));
+
+  const setSocialIcon = (key: string, icon: string) =>
+    setCard((c) => ({ ...c, social_icons: { ...(c.social_icons || {}), [key]: icon } }));
+
+
   const handleSave = async () => {
     if (!id) return;
     setSaving(true);
