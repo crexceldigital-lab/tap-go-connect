@@ -9,10 +9,14 @@ import ShareModal from "@/components/ShareModal";
 import UpgradeModal from "@/components/UpgradeModal";
 import {
   ArrowLeft, Save, Globe, Palette, Layout, Type, Image, ToggleLeft,
-  Camera, Upload, Check, QrCode, Link2, Share2, Sun, Moon, Sparkles
+  Camera, Upload, Check, QrCode, Link2, Share2, Sun, Moon, Sparkles,
+  AtSign, Paperclip, Plus, Trash2, FileText
 } from "lucide-react";
 import { cardThemes } from "@/data/cardThemes";
+import IconPicker from "@/components/IconPicker";
+import type { CustomLink, CardAttachment } from "@/components/CardPreview";
 import logo from "@/assets/tapngo-logo.png";
+
 
 const colorPresets = [
   "#3BB0D4", "#1a2332", "#6366f1", "#ec4899", "#f59e0b",
