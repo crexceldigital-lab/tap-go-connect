@@ -1,6 +1,10 @@
 import { motion } from "framer-motion";
 import { Check, Sparkles, Building2 } from "lucide-react";
 import { useGetStartedModal } from "@/contexts/GetStartedModalContext";
+import { usePaddleCheckout } from "@/hooks/usePaddleCheckout";
+import { supabase } from "@/integrations/supabase/client";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
 const plans = [
   {
@@ -37,6 +41,36 @@ const plans = [
 
 const PricingSection = () => {
   const { open: openGetStarted, openTeam } = useGetStartedModal();
+  const { openCheckout, loading } = usePaddleCheckout();
+  const [user, setUser] = useState<{ id: string; email?: string } | null>(null);
+
+  useEffect(() => {
+    supabase.auth.getUser().then(({ data }) => {
+      if (data.user) setUser({ id: data.user.id, email: data.user.email ?? undefined });
+    });
+    const { data: sub } = supabase.auth.onAuthStateChange((_e, session) => {
+      setUser(session?.user ? { id: session.user.id, email: session.user.email ?? undefined } : null);
+    });
+    return () => sub.subscription.unsubscribe();
+  }, []);
+
+  const handleProClick = async () => {
+    if (!user) {
+      openGetStarted();
+      return;
+    }
+    try {
+      await openCheckout({
+        priceId: "pro_yearly",
+        customerEmail: user.email,
+        customData: { userId: user.id },
+        successUrl: `${window.location.origin}/app?checkout=success`,
+      });
+    } catch (e) {
+      toast.error("Could not open checkout. Please try again.");
+      console.error(e);
+    }
+  };
 
   return (
     <section id="pricing" className="section-padding bg-card">
@@ -100,16 +134,17 @@ const PricingSection = () => {
                 ))}
               </ul>
               <motion.button
-                onClick={() => (plan.variant === "primary" ? openGetStarted() : openTeam())}
+                onClick={() => (plan.variant === "primary" ? handleProClick() : openTeam())}
+                disabled={plan.variant === "primary" && loading}
                 whileHover={{ y: -2 }}
                 whileTap={{ scale: 0.98 }}
-                className={`block w-full rounded-full py-3.5 text-center text-sm font-semibold transition-all duration-200 ${
+                className={`block w-full rounded-full py-3.5 text-center text-sm font-semibold transition-all duration-200 disabled:opacity-60 ${
                   plan.variant === "primary"
                     ? "brand-gradient text-primary-foreground gradient-glow"
                     : "border-2 border-brand-navy text-brand-navy hover:bg-brand-navy hover:text-primary-foreground"
                 }`}
               >
-                {plan.cta}
+                {plan.variant === "primary" && loading ? "Opening checkout…" : plan.cta}
               </motion.button>
             </motion.div>
           ))}

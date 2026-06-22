@@ -7,6 +7,7 @@ import { AuthProvider } from "@/hooks/useAuth";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { GetStartedModalProvider } from "@/contexts/GetStartedModalContext";
 import GetStartedModal from "@/components/GetStartedModal";
+import { PaymentTestModeBanner } from "@/components/PaymentTestModeBanner";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import Auth from "./pages/Auth";
@@ -49,6 +50,7 @@ const App = () => (
         <AuthProvider>
           <GetStartedModalProvider>
             <GetStartedModal />
+            <PaymentTestModeBanner />
             <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/auth" element={<Auth />} />

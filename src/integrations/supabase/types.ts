@@ -231,42 +231,6 @@ export type Database = {
           },
         ]
       }
-      team_inquiries: {
-        Row: {
-          company_name: string
-          created_at: string
-          full_name: string
-          id: string
-          message: string | null
-          phone: string | null
-          status: string
-          team_size: string | null
-          work_email: string
-        }
-        Insert: {
-          company_name: string
-          created_at?: string
-          full_name: string
-          id?: string
-          message?: string | null
-          phone?: string | null
-          status?: string
-          team_size?: string | null
-          work_email: string
-        }
-        Update: {
-          company_name?: string
-          created_at?: string
-          full_name?: string
-          id?: string
-          message?: string | null
-          phone?: string | null
-          status?: string
-          team_size?: string | null
-          work_email?: string
-        }
-        Relationships: []
-      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -324,6 +288,84 @@ export type Database = {
         }
         Relationships: []
       }
+      subscriptions: {
+        Row: {
+          cancel_at_period_end: boolean | null
+          created_at: string | null
+          current_period_end: string | null
+          current_period_start: string | null
+          environment: string
+          id: string
+          paddle_customer_id: string
+          paddle_subscription_id: string
+          price_id: string
+          product_id: string
+          status: string
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          cancel_at_period_end?: boolean | null
+          created_at?: string | null
+          current_period_end?: string | null
+          current_period_start?: string | null
+          environment?: string
+          id?: string
+          paddle_customer_id: string
+          paddle_subscription_id: string
+          price_id: string
+          product_id: string
+          status?: string
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          cancel_at_period_end?: boolean | null
+          created_at?: string | null
+          current_period_end?: string | null
+          current_period_start?: string | null
+          environment?: string
+          id?: string
+          paddle_customer_id?: string
+          paddle_subscription_id?: string
+          price_id?: string
+          product_id?: string
+          status?: string
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      team_inquiries: {
+        Row: {
+          company_name: string
+          created_at: string
+          full_name: string
+          id: string
+          phone: string | null
+          team_size: string
+          work_email: string
+        }
+        Insert: {
+          company_name: string
+          created_at?: string
+          full_name: string
+          id?: string
+          phone?: string | null
+          team_size: string
+          work_email: string
+        }
+        Update: {
+          company_name?: string
+          created_at?: string
+          full_name?: string
+          id?: string
+          phone?: string | null
+          team_size?: string
+          work_email?: string
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           id: string
@@ -347,6 +389,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      has_active_subscription: {
+        Args: { check_env?: string; user_uuid: string }
+        Returns: boolean
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
