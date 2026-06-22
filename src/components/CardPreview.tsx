@@ -47,7 +47,10 @@ export interface CardData {
   custom_links?: CustomLink[];
   attachments?: CardAttachment[];
   social_icons?: Record<string, string>;
+<<<<<<< HEAD
   social_display_style?: "icons" | "buttons" | "compact";
+=======
+>>>>>>> dd343628e0a3826546811d7be466519d4f5f36e1
   primary_color: string;
   secondary_color: string;
   background_style: string;
@@ -67,6 +70,7 @@ export interface CardData {
   show_navigate: boolean;
 }
 
+<<<<<<< HEAD
 const SOCIAL_DEFS: { key: keyof CardData; label: string; icon: any; href: (v: string) => string }[] = [
   { key: "instagram", label: "Instagram", icon: Instagram, href: (v) => (v.startsWith("http") ? v : `https://instagram.com/${v.replace(/^@/, "")}`) },
   { key: "linkedin", label: "LinkedIn", icon: Linkedin, href: (v) => (v.startsWith("http") ? v : `https://linkedin.com/in/${v}`) },
@@ -84,6 +88,24 @@ const SOCIAL_DEFS: { key: keyof CardData; label: string; icon: any; href: (v: st
 
 
 
+=======
+const SOCIAL_DEFS: { key: keyof CardData; icon: any; href: (v: string) => string }[] = [
+  { key: "instagram", icon: Instagram, href: (v) => (v.startsWith("http") ? v : `https://instagram.com/${v.replace(/^@/, "")}`) },
+  { key: "linkedin", icon: Linkedin, href: (v) => (v.startsWith("http") ? v : `https://linkedin.com/in/${v}`) },
+  { key: "twitter", icon: Twitter, href: (v) => (v.startsWith("http") ? v : `https://x.com/${v.replace(/^@/, "")}`) },
+  { key: "facebook", icon: Facebook, href: (v) => (v.startsWith("http") ? v : `https://facebook.com/${v}`) },
+  { key: "tiktok", icon: Music2, href: (v) => (v.startsWith("http") ? v : `https://tiktok.com/@${v.replace(/^@/, "")}`) },
+  { key: "youtube", icon: Youtube, href: (v) => (v.startsWith("http") ? v : `https://youtube.com/@${v.replace(/^@/, "")}`) },
+  { key: "github", icon: Github, href: (v) => (v.startsWith("http") ? v : `https://github.com/${v}`) },
+  { key: "behance", icon: Palette, href: (v) => (v.startsWith("http") ? v : `https://behance.net/${v}`) },
+  { key: "dribbble", icon: Dribbble, href: (v) => (v.startsWith("http") ? v : `https://dribbble.com/${v}`) },
+  { key: "telegram", icon: TelegramIcon, href: (v) => (v.startsWith("http") ? v : `https://t.me/${v.replace(/^@/, "")}`) },
+  { key: "snapchat", icon: Ghost, href: (v) => (v.startsWith("http") ? v : `https://snapchat.com/add/${v.replace(/^@/, "")}`) },
+  { key: "threads", icon: AtSign, href: (v) => (v.startsWith("http") ? v : `https://threads.net/@${v.replace(/^@/, "")}`) },
+];
+
+
+>>>>>>> dd343628e0a3826546811d7be466519d4f5f36e1
 interface CardPreviewProps {
   card: CardData;
   interactive?: boolean;
@@ -279,6 +301,7 @@ const CardPreview = ({ card, interactive, onActionClick, onConnectClick }: CardP
               .map((s) => ({ ...s, value: (card as any)[s.key] as string | undefined }))
               .filter((s) => s.value && s.value.trim().length > 0);
             if (socials.length === 0) return null;
+<<<<<<< HEAD
             const mode = card.social_display_style || "icons";
 
             if (mode === "buttons") {
@@ -327,6 +350,8 @@ const CardPreview = ({ card, interactive, onActionClick, onConnectClick }: CardP
             }
 
             // default: icons-only
+=======
+>>>>>>> dd343628e0a3826546811d7be466519d4f5f36e1
             return (
               <div className="flex flex-wrap gap-2 justify-center">
                 {socials.map(({ key, icon: DefaultIcon, href, value }) => {

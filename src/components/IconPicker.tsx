@@ -1,8 +1,13 @@
+<<<<<<< HEAD
 import { useState, useMemo, useEffect } from "react";
+=======
+import { useState, useMemo } from "react";
+>>>>>>> dd343628e0a3826546811d7be466519d4f5f36e1
 import { icons, Link as LinkIcon } from "lucide-react";
 import { Search } from "lucide-react";
 
 // Curated subset — full lucide list is ~1000+ icons (too heavy to render).
+<<<<<<< HEAD
 // Each icon is tagged with a category for filtering.
 const ICON_CATALOG = {
   Brand: ["Instagram", "Facebook", "Twitter", "Linkedin", "Youtube", "Github", "Twitch", "Rss"],
@@ -45,6 +50,32 @@ const pushRecent = (name: string) => {
   }
 };
 
+=======
+// Covers brand-style + common contact/social/file/action use cases.
+export const ICON_NAMES = [
+  // Social / brand
+  "Instagram", "Facebook", "Twitter", "Linkedin", "Youtube", "Github", "Twitch", "Rss",
+  // Messaging
+  "MessageCircle", "MessageSquare", "Mail", "Send", "Phone", "PhoneCall", "Video",
+  // Web / link
+  "Globe", "Link", "Link2", "ExternalLink", "AtSign", "Hash", "Bookmark",
+  // Media / content
+  "Music", "Music2", "Headphones", "Mic", "Camera", "Image", "Film", "PlayCircle",
+  // Files / docs
+  "FileText", "File", "FileImage", "FolderOpen", "Download", "Paperclip", "BookOpen", "ClipboardList",
+  // Business / commerce
+  "Briefcase", "Building", "Building2", "Store", "ShoppingBag", "ShoppingCart", "CreditCard", "DollarSign",
+  // Location / contact
+  "MapPin", "Map", "Navigation", "Compass", "Home", "User", "Users", "UserPlus",
+  // Calendar / time
+  "Calendar", "CalendarDays", "Clock",
+  // Misc
+  "Star", "Heart", "Award", "Sparkles", "Zap", "Coffee", "Smile", "Gift", "Tag", "ThumbsUp",
+] as const;
+
+export type IconName = (typeof ICON_NAMES)[number];
+
+>>>>>>> dd343628e0a3826546811d7be466519d4f5f36e1
 export const getIconComponent = (name?: string | null) => {
   if (!name) return LinkIcon;
   return (icons as any)[name] || LinkIcon;
@@ -59,6 +90,7 @@ interface IconPickerProps {
 const IconPicker = ({ value, onChange, label }: IconPickerProps) => {
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
+<<<<<<< HEAD
   const [category, setCategory] = useState<"All" | "Recent" | keyof typeof ICON_CATALOG>("All");
   const [recents, setRecents] = useState<string[]>([]);
 
@@ -86,6 +118,14 @@ const IconPicker = ({ value, onChange, label }: IconPickerProps) => {
     pushRecent(name);
     setOpen(false);
   };
+=======
+
+  const filtered = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    if (!q) return ICON_NAMES;
+    return ICON_NAMES.filter((n) => n.toLowerCase().includes(q));
+  }, [query]);
+>>>>>>> dd343628e0a3826546811d7be466519d4f5f36e1
 
   const CurrentIcon = getIconComponent(value);
 
@@ -103,7 +143,11 @@ const IconPicker = ({ value, onChange, label }: IconPickerProps) => {
       {open && (
         <>
           <div className="fixed inset-0 z-40" onClick={() => setOpen(false)} />
+<<<<<<< HEAD
           <div className="absolute z-50 top-12 left-0 w-80 max-h-96 bg-card border border-border rounded-2xl shadow-2xl p-3 flex flex-col">
+=======
+          <div className="absolute z-50 top-12 left-0 w-72 max-h-80 bg-card border border-border rounded-2xl shadow-2xl p-3 flex flex-col">
+>>>>>>> dd343628e0a3826546811d7be466519d4f5f36e1
             <div className="relative mb-2">
               <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
               <input
@@ -114,6 +158,7 @@ const IconPicker = ({ value, onChange, label }: IconPickerProps) => {
                 className="w-full pl-8 pr-3 py-2 rounded-lg bg-secondary border border-border text-xs outline-none focus:border-primary/50"
               />
             </div>
+<<<<<<< HEAD
 
             {!query && (
               <div className="flex gap-1.5 mb-2 overflow-x-auto pb-1">
@@ -132,6 +177,8 @@ const IconPicker = ({ value, onChange, label }: IconPickerProps) => {
               </div>
             )}
 
+=======
+>>>>>>> dd343628e0a3826546811d7be466519d4f5f36e1
             <div className="grid grid-cols-7 gap-1 overflow-y-auto">
               {filtered.map((name) => {
                 const Icon = getIconComponent(name);
@@ -140,7 +187,14 @@ const IconPicker = ({ value, onChange, label }: IconPickerProps) => {
                   <button
                     key={name}
                     type="button"
+<<<<<<< HEAD
                     onClick={() => handlePick(name)}
+=======
+                    onClick={() => {
+                      onChange(name);
+                      setOpen(false);
+                    }}
+>>>>>>> dd343628e0a3826546811d7be466519d4f5f36e1
                     title={name}
                     className={`h-9 w-9 rounded-lg flex items-center justify-center transition-colors ${
                       isActive
@@ -153,9 +207,13 @@ const IconPicker = ({ value, onChange, label }: IconPickerProps) => {
                 );
               })}
               {filtered.length === 0 && (
+<<<<<<< HEAD
                 <p className="col-span-7 text-center text-xs text-muted-foreground py-4">
                   {category === "Recent" ? "No recent icons yet" : "No icons"}
                 </p>
+=======
+                <p className="col-span-7 text-center text-xs text-muted-foreground py-4">No icons</p>
+>>>>>>> dd343628e0a3826546811d7be466519d4f5f36e1
               )}
             </div>
           </div>
