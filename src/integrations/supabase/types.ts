@@ -288,6 +288,36 @@ export type Database = {
         }
         Relationships: []
       }
+      team_inquiries: {
+        Row: {
+          company_name: string
+          created_at: string
+          full_name: string
+          id: string
+          phone: string | null
+          team_size: string
+          work_email: string
+        }
+        Insert: {
+          company_name: string
+          created_at?: string
+          full_name: string
+          id?: string
+          phone?: string | null
+          team_size: string
+          work_email: string
+        }
+        Update: {
+          company_name?: string
+          created_at?: string
+          full_name?: string
+          id?: string
+          phone?: string | null
+          team_size?: string
+          work_email?: string
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           id: string
