@@ -1,4 +1,19 @@
-import { Phone, Mail, Globe, Save, MessageCircle, Calendar, MapPin, UserPlus } from "lucide-react";
+import { Phone, Mail, Globe, Save, MessageCircle, Calendar, MapPin, UserPlus, Instagram, Linkedin, Twitter, Facebook, Youtube, Github, Send as TelegramIcon, Ghost, AtSign, Music2, Palette, Dribbble, Paperclip, Download } from "lucide-react";
+import { getIconComponent } from "./IconPicker";
+
+export interface CustomLink {
+  label: string;
+  url: string;
+  icon?: string;
+}
+
+export interface CardAttachment {
+  label: string;
+  url: string;
+  filename: string;
+  size?: number;
+  type?: string;
+}
 
 export interface CardData {
   full_name: string;
@@ -10,10 +25,28 @@ export interface CardData {
   phone: string;
   email: string;
   website: string;
+  bio?: string;
+  address?: string;
+  department?: string;
+  pronouns?: string;
+  secondary_phone?: string;
+  secondary_email?: string;
   instagram: string;
   linkedin: string;
   twitter: string;
   whatsapp: string;
+  facebook?: string;
+  tiktok?: string;
+  youtube?: string;
+  github?: string;
+  behance?: string;
+  dribbble?: string;
+  telegram?: string;
+  snapchat?: string;
+  threads?: string;
+  custom_links?: CustomLink[];
+  attachments?: CardAttachment[];
+  social_icons?: Record<string, string>;
   primary_color: string;
   secondary_color: string;
   background_style: string;
@@ -32,6 +65,22 @@ export interface CardData {
   show_book_appointment: boolean;
   show_navigate: boolean;
 }
+
+const SOCIAL_DEFS: { key: keyof CardData; icon: any; href: (v: string) => string }[] = [
+  { key: "instagram", icon: Instagram, href: (v) => (v.startsWith("http") ? v : `https://instagram.com/${v.replace(/^@/, "")}`) },
+  { key: "linkedin", icon: Linkedin, href: (v) => (v.startsWith("http") ? v : `https://linkedin.com/in/${v}`) },
+  { key: "twitter", icon: Twitter, href: (v) => (v.startsWith("http") ? v : `https://x.com/${v.replace(/^@/, "")}`) },
+  { key: "facebook", icon: Facebook, href: (v) => (v.startsWith("http") ? v : `https://facebook.com/${v}`) },
+  { key: "tiktok", icon: Music2, href: (v) => (v.startsWith("http") ? v : `https://tiktok.com/@${v.replace(/^@/, "")}`) },
+  { key: "youtube", icon: Youtube, href: (v) => (v.startsWith("http") ? v : `https://youtube.com/@${v.replace(/^@/, "")}`) },
+  { key: "github", icon: Github, href: (v) => (v.startsWith("http") ? v : `https://github.com/${v}`) },
+  { key: "behance", icon: Palette, href: (v) => (v.startsWith("http") ? v : `https://behance.net/${v}`) },
+  { key: "dribbble", icon: Dribbble, href: (v) => (v.startsWith("http") ? v : `https://dribbble.com/${v}`) },
+  { key: "telegram", icon: TelegramIcon, href: (v) => (v.startsWith("http") ? v : `https://t.me/${v.replace(/^@/, "")}`) },
+  { key: "snapchat", icon: Ghost, href: (v) => (v.startsWith("http") ? v : `https://snapchat.com/add/${v.replace(/^@/, "")}`) },
+  { key: "threads", icon: AtSign, href: (v) => (v.startsWith("http") ? v : `https://threads.net/@${v.replace(/^@/, "")}`) },
+];
+
 
 interface CardPreviewProps {
   card: CardData;
