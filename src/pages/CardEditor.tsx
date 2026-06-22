@@ -69,6 +69,11 @@ const CardEditor = () => {
     card_name: "My Card",
     full_name: "", job_title: "", company_name: "", avatar_url: "", logo_url: "", logo_position: "top",
     phone: "", email: "", website: "", instagram: "", linkedin: "", twitter: "", whatsapp: "",
+    bio: "", address: "", department: "", pronouns: "",
+    secondary_phone: "", secondary_email: "",
+    facebook: "", tiktok: "", youtube: "", github: "", behance: "", dribbble: "",
+    telegram: "", snapchat: "", threads: "",
+    custom_links: [], attachments: [], social_icons: {},
     primary_color: "#3BB0D4", secondary_color: "#1a2332",
     background_style: "gradient", profile_image_style: "circle", profile_image_border: true,
     button_style: "pill", button_fill: "fill", button_shadow: true,
@@ -76,6 +81,7 @@ const CardEditor = () => {
     show_save_contact: true, show_call: true, show_email: true, show_whatsapp: true,
     show_book_appointment: false, show_navigate: false,
   });
+
 
   useEffect(() => {
     if (!id || !user) return;
