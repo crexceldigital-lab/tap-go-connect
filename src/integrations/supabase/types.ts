@@ -57,8 +57,12 @@ export type Database = {
       }
       cards: {
         Row: {
+          address: string | null
+          attachments: Json
           avatar_url: string | null
           background_style: string
+          behance: string | null
+          bio: string | null
           button_fill: string
           button_shadow: boolean
           button_style: string
@@ -68,9 +72,14 @@ export type Database = {
           color_theme: string
           company_name: string | null
           created_at: string
+          custom_links: Json
+          department: string | null
+          dribbble: string | null
           email: string | null
+          facebook: string | null
           font_style: string
           full_name: string | null
+          github: string | null
           id: string
           instagram: string | null
           is_published: boolean
@@ -83,7 +92,10 @@ export type Database = {
           primary_color: string
           profile_image_border: boolean
           profile_image_style: string
+          pronouns: string | null
           secondary_color: string
+          secondary_email: string | null
+          secondary_phone: string | null
           share_count: number
           show_book_appointment: boolean
           show_call: boolean
@@ -92,17 +104,27 @@ export type Database = {
           show_save_contact: boolean
           show_whatsapp: boolean
           slug: string | null
+          snapchat: string | null
+          social_icons: Json
           taps_count: number
+          telegram: string | null
+          threads: string | null
+          tiktok: string | null
           twitter: string | null
           updated_at: string
           user_id: string
           views_count: number
           website: string | null
           whatsapp: string | null
+          youtube: string | null
         }
         Insert: {
+          address?: string | null
+          attachments?: Json
           avatar_url?: string | null
           background_style?: string
+          behance?: string | null
+          bio?: string | null
           button_fill?: string
           button_shadow?: boolean
           button_style?: string
@@ -112,9 +134,14 @@ export type Database = {
           color_theme?: string
           company_name?: string | null
           created_at?: string
+          custom_links?: Json
+          department?: string | null
+          dribbble?: string | null
           email?: string | null
+          facebook?: string | null
           font_style?: string
           full_name?: string | null
+          github?: string | null
           id?: string
           instagram?: string | null
           is_published?: boolean
@@ -127,7 +154,10 @@ export type Database = {
           primary_color?: string
           profile_image_border?: boolean
           profile_image_style?: string
+          pronouns?: string | null
           secondary_color?: string
+          secondary_email?: string | null
+          secondary_phone?: string | null
           share_count?: number
           show_book_appointment?: boolean
           show_call?: boolean
@@ -136,17 +166,27 @@ export type Database = {
           show_save_contact?: boolean
           show_whatsapp?: boolean
           slug?: string | null
+          snapchat?: string | null
+          social_icons?: Json
           taps_count?: number
+          telegram?: string | null
+          threads?: string | null
+          tiktok?: string | null
           twitter?: string | null
           updated_at?: string
           user_id: string
           views_count?: number
           website?: string | null
           whatsapp?: string | null
+          youtube?: string | null
         }
         Update: {
+          address?: string | null
+          attachments?: Json
           avatar_url?: string | null
           background_style?: string
+          behance?: string | null
+          bio?: string | null
           button_fill?: string
           button_shadow?: boolean
           button_style?: string
@@ -156,9 +196,14 @@ export type Database = {
           color_theme?: string
           company_name?: string | null
           created_at?: string
+          custom_links?: Json
+          department?: string | null
+          dribbble?: string | null
           email?: string | null
+          facebook?: string | null
           font_style?: string
           full_name?: string | null
+          github?: string | null
           id?: string
           instagram?: string | null
           is_published?: boolean
@@ -171,7 +216,10 @@ export type Database = {
           primary_color?: string
           profile_image_border?: boolean
           profile_image_style?: string
+          pronouns?: string | null
           secondary_color?: string
+          secondary_email?: string | null
+          secondary_phone?: string | null
           share_count?: number
           show_book_appointment?: boolean
           show_call?: boolean
@@ -180,13 +228,19 @@ export type Database = {
           show_save_contact?: boolean
           show_whatsapp?: boolean
           slug?: string | null
+          snapchat?: string | null
+          social_icons?: Json
           taps_count?: number
+          telegram?: string | null
+          threads?: string | null
+          tiktok?: string | null
           twitter?: string | null
           updated_at?: string
           user_id?: string
           views_count?: number
           website?: string | null
           whatsapp?: string | null
+          youtube?: string | null
         }
         Relationships: []
       }
