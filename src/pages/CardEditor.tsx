@@ -78,7 +78,7 @@ const CardEditor = () => {
     primary_color: "#3BB0D4", secondary_color: "#1a2332",
     background_style: "gradient", profile_image_style: "circle", profile_image_border: true,
     button_style: "pill", button_fill: "fill", button_shadow: true,
-    card_layout: "minimal", font_style: "modern", card_theme: "light",
+    card_layout: "classic", font_style: "modern", card_theme: "light",
     show_save_contact: true, show_call: true, show_email: true, show_whatsapp: true,
     show_book_appointment: false, show_navigate: false,
   });
@@ -597,7 +597,17 @@ const CardEditor = () => {
                 <>
                   <div className="space-y-3">
                     <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-wider">Card Layout</h3>
-                    <OptionGroup options={[{ value: "minimal", label: "Minimal" }, { value: "bold", label: "Bold" }, { value: "corporate", label: "Corporate" }, { value: "modern", label: "Modern" }, { value: "cover", label: "Cover Image" }]} value={card.card_layout} onChange={v => update("card_layout", v)} />
+                    <p className="text-xs text-muted-foreground">Each option is a genuinely different arrangement, not just a color swap.</p>
+                    <OptionGroup
+                      options={[
+                        { value: "classic", label: "Classic — Centered" },
+                        { value: "cover", label: "Cover — Photo first" },
+                        { value: "split", label: "Split — Header row" },
+                        { value: "list", label: "List — Compact" },
+                      ]}
+                      value={card.card_layout}
+                      onChange={v => update("card_layout", v)}
+                    />
                   </div>
                   <div className="space-y-3">
                     <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-wider">Profile Image</h3>
