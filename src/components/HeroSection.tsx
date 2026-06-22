@@ -1,9 +1,9 @@
 import { motion } from "framer-motion";
 import { Smartphone, Wifi, Mail, Phone, Sparkles, ShieldCheck, Zap } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useGetStartedModal } from "@/contexts/GetStartedModalContext";
 
 const HeroSection = () => {
-  const navigate = useNavigate();
+  const { open: openGetStarted } = useGetStartedModal();
 
   return (
     <section className="relative min-h-screen flex items-center section-padding pt-32 overflow-hidden bg-card">
@@ -35,7 +35,7 @@ const HeroSection = () => {
 
             <div className="flex flex-col sm:flex-row gap-4">
               <motion.button
-                onClick={() => navigate("/auth")}
+                onClick={openGetStarted}
                 whileHover={{ y: -2 }}
                 whileTap={{ scale: 0.98 }}
                 className="brand-gradient rounded-full px-8 py-4 text-center font-semibold text-primary-foreground gradient-glow transition-all duration-200"

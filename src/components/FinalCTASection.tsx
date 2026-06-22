@@ -1,8 +1,8 @@
 import { motion } from "framer-motion";
-import { useNavigate } from "react-router-dom";
+import { useGetStartedModal } from "@/contexts/GetStartedModalContext";
 
 const FinalCTASection = () => {
-  const navigate = useNavigate();
+  const { open: openGetStarted } = useGetStartedModal();
 
   return (
     <section className="section-padding navy-bg grain-overlay relative overflow-hidden">
@@ -31,7 +31,7 @@ const FinalCTASection = () => {
           className="flex flex-col sm:flex-row gap-4 justify-center"
         >
           <motion.button
-            onClick={() => navigate("/auth")}
+            onClick={openGetStarted}
             whileHover={{ y: -2 }}
             whileTap={{ scale: 0.98 }}
             className="brand-gradient rounded-full px-8 py-4 text-center font-semibold text-primary-foreground gradient-glow transition-all duration-200"
@@ -39,12 +39,12 @@ const FinalCTASection = () => {
             Create Your Card Free
           </motion.button>
           <motion.a
-            href="#contact"
+            href="#faq"
             whileHover={{ y: -2 }}
             whileTap={{ scale: 0.98 }}
             className="rounded-full border-2 border-primary-foreground/30 px-8 py-4 text-center font-semibold text-primary-foreground hover:bg-primary-foreground/10 transition-all duration-200"
           >
-            Book a Demo
+            Have Questions?
           </motion.a>
         </motion.div>
       </div>

@@ -2,20 +2,22 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
+import { useGetStartedModal } from "@/contexts/GetStartedModalContext";
 import logo from "@/assets/tapngo-logo.png";
 
 const navLinks = [
-  { label: "Home", href: "#" },
-  { label: "Features", href: "#features" },
-  { label: "Pricing", href: "#pricing" },
-  { label: "For Business", href: "#business" },
-  { label: "Contact", href: "#contact" },
+  { label: "Home", href: "/" },
+  { label: "Features", href: "/#features" },
+  { label: "Solutions", href: "/#business" },
+  { label: "Pricing", href: "/#pricing" },
+  { label: "FAQ", href: "/#faq" },
 ];
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const navigate = useNavigate();
+  const { open: openGetStarted } = useGetStartedModal();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
@@ -59,7 +61,7 @@ const Navbar = () => {
               Log In
             </button>
             <motion.button
-              onClick={() => navigate("/auth")}
+              onClick={openGetStarted}
               whileHover={{ y: -1 }}
               whileTap={{ scale: 0.98 }}
               className="brand-gradient rounded-full px-6 py-2.5 text-sm font-semibold text-primary-foreground gradient-glow transition-all duration-200"
@@ -87,7 +89,7 @@ const Navbar = () => {
                 <a key={link.label} href={link.href} onClick={() => setIsOpen(false)}
                   className="block text-sm font-medium text-muted-foreground py-2">{link.label}</a>
               ))}
-              <button onClick={() => { setIsOpen(false); navigate("/auth"); }} className="block w-full brand-gradient rounded-full px-5 py-3 text-center text-sm font-semibold text-primary-foreground mt-2">
+              <button onClick={() => { setIsOpen(false); openGetStarted(); }} className="block w-full brand-gradient rounded-full px-5 py-3 text-center text-sm font-semibold text-primary-foreground mt-2">
                 Get Started
               </button>
             </div>

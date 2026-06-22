@@ -3,9 +3,23 @@ import { Twitter, Linkedin, Instagram, ArrowRight } from "lucide-react";
 import logo from "@/assets/tapngo-logo.png";
 
 const footerLinks = {
-  Product: ["Features", "Pricing", "NFC Cards", "For Teams"],
-  Company: ["About", "Blog", "Careers", "Contact"],
-  Support: ["Help Center", "API Docs", "Privacy Policy", "Terms"],
+  Product: [
+    { label: "Features", href: "/#features" },
+    { label: "Pricing", href: "/#pricing" },
+    { label: "How It Works", href: "/#how-it-works" },
+    { label: "FAQ", href: "/#faq" },
+  ],
+  Solutions: [
+    { label: "Sales Teams", href: "/solutions/sales-teams" },
+    { label: "Real Estate", href: "/solutions/real-estate" },
+    { label: "Events & Trade Shows", href: "/solutions/events" },
+    { label: "Corporate Teams", href: "/solutions/corporate-teams" },
+  ],
+  Support: [
+    { label: "Help Center", href: "/#faq" },
+    { label: "Privacy Policy", href: "#" },
+    { label: "Terms", href: "#" },
+  ],
 };
 
 const socials = [
@@ -57,9 +71,9 @@ const FooterSection = () => (
             <h4 className="text-sm font-semibold text-primary-foreground">{title}</h4>
             <ul className="space-y-2.5">
               {links.map((link) => (
-                <li key={link}>
-                  <a href="#" className="text-sm text-primary-foreground/50 hover:text-primary-foreground transition-colors duration-200">
-                    {link}
+                <li key={link.label}>
+                  <a href={link.href} className="text-sm text-primary-foreground/50 hover:text-primary-foreground transition-colors duration-200">
+                    {link.label}
                   </a>
                 </li>
               ))}

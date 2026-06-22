@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { Check, Sparkles, Building2 } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useGetStartedModal } from "@/contexts/GetStartedModalContext";
 
 const plans = [
   {
@@ -36,7 +36,7 @@ const plans = [
 ];
 
 const PricingSection = () => {
-  const navigate = useNavigate();
+  const { open: openGetStarted, openTeam } = useGetStartedModal();
 
   return (
     <section id="pricing" className="section-padding bg-card">
@@ -100,7 +100,7 @@ const PricingSection = () => {
                 ))}
               </ul>
               <motion.button
-                onClick={() => navigate("/auth")}
+                onClick={() => (plan.variant === "primary" ? openGetStarted() : openTeam())}
                 whileHover={{ y: -2 }}
                 whileTap={{ scale: 0.98 }}
                 className={`block w-full rounded-full py-3.5 text-center text-sm font-semibold transition-all duration-200 ${
