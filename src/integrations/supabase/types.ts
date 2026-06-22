@@ -443,6 +443,77 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      get_public_card_by_slug: {
+        Args: { _slug: string }
+        Returns: {
+          address: string | null
+          attachments: Json
+          avatar_url: string | null
+          background_style: string
+          behance: string | null
+          bio: string | null
+          button_fill: string
+          button_shadow: boolean
+          button_style: string
+          card_layout: string
+          card_name: string
+          card_theme: string
+          color_theme: string
+          company_name: string | null
+          created_at: string
+          custom_links: Json
+          department: string | null
+          dribbble: string | null
+          email: string | null
+          facebook: string | null
+          font_style: string
+          full_name: string | null
+          github: string | null
+          id: string
+          instagram: string | null
+          is_published: boolean
+          job_title: string | null
+          leads_count: number
+          linkedin: string | null
+          logo_position: string
+          logo_url: string | null
+          phone: string | null
+          primary_color: string
+          profile_image_border: boolean
+          profile_image_style: string
+          pronouns: string | null
+          secondary_color: string
+          secondary_email: string | null
+          secondary_phone: string | null
+          share_count: number
+          show_book_appointment: boolean
+          show_call: boolean
+          show_email: boolean
+          show_navigate: boolean
+          show_save_contact: boolean
+          show_whatsapp: boolean
+          slug: string | null
+          snapchat: string | null
+          social_icons: Json
+          taps_count: number
+          telegram: string | null
+          threads: string | null
+          tiktok: string | null
+          twitter: string | null
+          updated_at: string
+          user_id: string
+          views_count: number
+          website: string | null
+          whatsapp: string | null
+          youtube: string | null
+        }[]
+        SetofOptions: {
+          from: "*"
+          to: "cards"
+          isOneToOne: false
+          isSetofReturn: true
+        }
+      }
       has_active_subscription: {
         Args: { check_env?: string; user_uuid: string }
         Returns: boolean
@@ -454,6 +525,8 @@ export type Database = {
         }
         Returns: boolean
       }
+      increment_card_view: { Args: { _card_id: string }; Returns: undefined }
+      is_card_published: { Args: { _card_id: string }; Returns: boolean }
     }
     Enums: {
       app_role: "admin" | "moderator" | "user"
