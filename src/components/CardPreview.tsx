@@ -261,11 +261,85 @@ const CardPreview = ({ card, interactive, onActionClick, onConnectClick }: CardP
             </div>
           )}
 
+          {card.bio && (
+            <p className={`text-xs text-center leading-relaxed ${subtextColor}`}>{card.bio}</p>
+          )}
+
+          {card.address && (
+            <div className={`flex items-start gap-2 text-xs ${subtextColor}`}>
+              <MapPin size={12} className="mt-0.5 shrink-0" />
+              <span>{card.address}</span>
+            </div>
+          )}
+
+          {(() => {
+            const socials = SOCIAL_DEFS
+              .map((s) => ({ ...s, value: (card as any)[s.key] as string | undefined }))
+              .filter((s) => s.value && s.value.trim().length > 0);
+            if (socials.length === 0) return null;
+            return (
+              <div className="flex flex-wrap gap-2 justify-center">
+                {socials.map(({ key, icon: DefaultIcon, href, value }) => {
+                  const override = card.social_icons?.[key as string];
+                  const Icon = override ? getIconComponent(override) : DefaultIcon;
+                  const node = (
+                    <Icon size={14} className={btnTextColor} />
+                  );
+                  const className = `h-9 w-9 rounded-full ${actionBg} flex items-center justify-center hover:scale-110 transition-transform`;
+                  return interactive ? (
+                    <a key={key as string} href={href(value!)} target="_blank" rel="noopener noreferrer" className={className}>{node}</a>
+                  ) : (
+                    <div key={key as string} className={className}>{node}</div>
+                  );
+                })}
+              </div>
+            );
+          })()}
+
+          {card.custom_links && card.custom_links.length > 0 && (
+            <div className="space-y-2">
+              {card.custom_links.filter(l => l.url && l.label).map((link, i) => {
+                const Icon = getIconComponent(link.icon);
+                const className = `flex items-center gap-3 px-4 py-2.5 rounded-xl ${actionBg} ${textColor} text-xs font-medium hover:scale-[1.02] transition-transform`;
+                return interactive ? (
+                  <a key={i} href={link.url} target="_blank" rel="noopener noreferrer" className={className}>
+                    <Icon size={14} /><span className="truncate">{link.label}</span>
+                  </a>
+                ) : (
+                  <div key={i} className={className}>
+                    <Icon size={14} /><span className="truncate">{link.label}</span>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+
+          {card.attachments && card.attachments.length > 0 && (
+            <div className="space-y-2">
+              {card.attachments.filter(a => a.url).map((file, i) => {
+                const className = `flex items-center gap-3 px-4 py-2.5 rounded-xl ${actionBg} ${textColor} text-xs font-medium hover:scale-[1.02] transition-transform`;
+                const content = (
+                  <>
+                    <Paperclip size={14} className="shrink-0" />
+                    <span className="truncate flex-1">{file.label || file.filename}</span>
+                    <Download size={12} className={btnTextColor} />
+                  </>
+                );
+                return interactive ? (
+                  <a key={i} href={file.url} target="_blank" rel="noopener noreferrer" download={file.filename} className={className}>{content}</a>
+                ) : (
+                  <div key={i} className={className}>{content}</div>
+                );
+              })}
+            </div>
+          )}
+
           {card.show_save_contact && (
             <div className={`${btnClass} cursor-pointer`} style={btnBg} onClick={handleSaveContact}>
               <Save size={14} className="inline mr-1.5" />Save Contact
             </div>
           )}
+
 
           {card.logo_url && card.logo_position === "footer" && (
             <div className="flex justify-center pt-2">
