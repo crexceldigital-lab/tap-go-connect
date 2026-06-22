@@ -5,6 +5,8 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { AuthProvider } from "@/hooks/useAuth";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
+import { GetStartedModalProvider } from "@/contexts/GetStartedModalContext";
+import GetStartedModal from "@/components/GetStartedModal";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import Auth from "./pages/Auth";
@@ -14,6 +16,7 @@ import Dashboard from "./pages/Dashboard";
 import CardEditor from "./pages/CardEditor";
 import Scanner from "./pages/Scanner";
 import PublicCard from "./pages/PublicCard";
+import SolutionPage from "./pages/SolutionPage";
 import MobileLayout from "./components/mobile/MobileLayout";
 import CardsTab from "./pages/app/CardsTab";
 import ScannerTab from "./pages/app/ScannerTab";
@@ -44,11 +47,14 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <AuthProvider>
-          <Routes>
+          <GetStartedModalProvider>
+            <GetStartedModal />
+            <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/auth" element={<Auth />} />
             <Route path="/reset-password" element={<ResetPassword />} />
             <Route path="/onboarding" element={<Onboarding />} />
+            <Route path="/solutions/:slug" element={<SolutionPage />} />
             <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
             <Route path="/editor/:id" element={<ProtectedRoute><CardEditor /></ProtectedRoute>} />
             <Route path="/scanner" element={<ProtectedRoute><Scanner /></ProtectedRoute>} />
@@ -74,7 +80,8 @@ const App = () => (
             <Route path="/admin/settings" element={<AdminProtectedRoute><AdminLayout><AdminSettings /></AdminLayout></AdminProtectedRoute>} />
 
             <Route path="*" element={<NotFound />} />
-          </Routes>
+            </Routes>
+          </GetStartedModalProvider>
         </AuthProvider>
       </BrowserRouter>
     </TooltipProvider>
