@@ -18,6 +18,8 @@ import CardEditor from "./pages/CardEditor";
 import Scanner from "./pages/Scanner";
 import PublicCard from "./pages/PublicCard";
 import SolutionPage from "./pages/SolutionPage";
+import SalesforceCallback from "./pages/integrations/SalesforceCallback";
+import ZohoCallback from "./pages/integrations/ZohoCallback";
 import MobileLayout from "./components/mobile/MobileLayout";
 import CardsTab from "./pages/app/CardsTab";
 import ScannerTab from "./pages/app/ScannerTab";
@@ -57,6 +59,8 @@ const App = () => (
             <Route path="/reset-password" element={<ResetPassword />} />
             <Route path="/onboarding" element={<Onboarding />} />
             <Route path="/solutions/:slug" element={<SolutionPage />} />
+            <Route path="/integrations/salesforce/callback" element={<SalesforceCallback />} />
+            <Route path="/integrations/zoho/callback" element={<ZohoCallback />} />
             <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
             <Route path="/editor/:id" element={<ProtectedRoute><CardEditor /></ProtectedRoute>} />
             <Route path="/scanner" element={<ProtectedRoute><Scanner /></ProtectedRoute>} />

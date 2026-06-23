@@ -5,6 +5,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import UpgradeModal from "@/components/UpgradeModal";
 import HubSpotConnectModal from "@/components/HubSpotConnectModal";
+import SalesforceConnectModal from "@/components/SalesforceConnectModal";
+import ZohoConnectModal from "@/components/ZohoConnectModal";
 import { User, Crown, LogOut, ChevronRight, Shield, Bell, HelpCircle, Mail, Link2 } from "lucide-react";
 
 const SettingsTab = () => {
@@ -12,16 +14,22 @@ const SettingsTab = () => {
   const navigate = useNavigate();
   const [upgradeOpen, setUpgradeOpen] = useState(false);
   const [hubspotOpen, setHubspotOpen] = useState(false);
+  const [salesforceOpen, setSalesforceOpen] = useState(false);
+  const [zohoOpen, setZohoOpen] = useState(false);
   const [hubspotConnected, setHubspotConnected] = useState(false);
+  const [salesforceConnected, setSalesforceConnected] = useState(false);
+  const [zohoConnected, setZohoConnected] = useState(false);
   const [profile, setProfile] = useState<{ full_name: string | null; email: string | null } | null>(null);
 
   useEffect(() => {
     if (!user) return;
-    supabase.from("profiles").select("full_name, email, hubspot_sync_enabled").eq("user_id", user.id).single().then(({ data }) => {
+    supabase.from("profiles").select("full_name, email, hubspot_sync_enabled, salesforce_sync_enabled, zoho_sync_enabled").eq("user_id", user.id).single().then(({ data }) => {
       setProfile(data);
       setHubspotConnected(!!(data as any)?.hubspot_sync_enabled);
+      setSalesforceConnected(!!(data as any)?.salesforce_sync_enabled);
+      setZohoConnected(!!(data as any)?.zoho_sync_enabled);
     });
-  }, [user, hubspotOpen]);
+  }, [user, hubspotOpen, salesforceOpen, zohoOpen]);
 
   const handleLogout = async () => {
     await signOut();
@@ -47,6 +55,8 @@ const SettingsTab = () => {
       title: "Integrations",
       items: [
         { icon: Link2, label: hubspotConnected ? "HubSpot CRM — Connected" : "Connect HubSpot CRM", action: () => setHubspotOpen(true), accent: hubspotConnected },
+        { icon: Link2, label: salesforceConnected ? "Salesforce — Connected" : "Connect Salesforce", action: () => setSalesforceOpen(true), accent: salesforceConnected },
+        { icon: Link2, label: zohoConnected ? "Zoho CRM — Connected" : "Connect Zoho CRM", action: () => setZohoOpen(true), accent: zohoConnected },
       ],
     },
     {
@@ -120,6 +130,8 @@ const SettingsTab = () => {
 
       <UpgradeModal open={upgradeOpen} onClose={() => setUpgradeOpen(false)} />
       <HubSpotConnectModal open={hubspotOpen} onClose={() => setHubspotOpen(false)} />
+      <SalesforceConnectModal open={salesforceOpen} onClose={() => setSalesforceOpen(false)} />
+      <ZohoConnectModal open={zohoOpen} onClose={() => setZohoOpen(false)} />
     </div>
   );
 };

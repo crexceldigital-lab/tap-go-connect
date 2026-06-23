@@ -299,6 +299,16 @@ export type Database = {
           hubspot_sync_enabled: boolean
           id: string
           instagram: string | null
+          salesforce_access_token: string | null
+          salesforce_instance_url: string | null
+          salesforce_refresh_token: string | null
+          salesforce_sync_enabled: boolean
+          salesforce_token_expires_at: string | null
+          zoho_access_token: string | null
+          zoho_api_domain: string | null
+          zoho_refresh_token: string | null
+          zoho_sync_enabled: boolean
+          zoho_token_expires_at: string | null
           job_title: string | null
           linkedin: string | null
           onboarding_completed: boolean
@@ -319,6 +329,16 @@ export type Database = {
           hubspot_sync_enabled?: boolean
           id?: string
           instagram?: string | null
+          salesforce_access_token?: string | null
+          salesforce_instance_url?: string | null
+          salesforce_refresh_token?: string | null
+          salesforce_sync_enabled?: boolean
+          salesforce_token_expires_at?: string | null
+          zoho_access_token?: string | null
+          zoho_api_domain?: string | null
+          zoho_refresh_token?: string | null
+          zoho_sync_enabled?: boolean
+          zoho_token_expires_at?: string | null
           job_title?: string | null
           linkedin?: string | null
           onboarding_completed?: boolean
@@ -339,6 +359,16 @@ export type Database = {
           hubspot_sync_enabled?: boolean
           id?: string
           instagram?: string | null
+          salesforce_access_token?: string | null
+          salesforce_instance_url?: string | null
+          salesforce_refresh_token?: string | null
+          salesforce_sync_enabled?: boolean
+          salesforce_token_expires_at?: string | null
+          zoho_access_token?: string | null
+          zoho_api_domain?: string | null
+          zoho_refresh_token?: string | null
+          zoho_sync_enabled?: boolean
+          zoho_token_expires_at?: string | null
           job_title?: string | null
           linkedin?: string | null
           onboarding_completed?: boolean
