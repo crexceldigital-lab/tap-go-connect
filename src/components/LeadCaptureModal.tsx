@@ -31,16 +31,24 @@ const LeadCaptureModal = ({ open, onClose, cardId, source = "link", onSuccess, s
     setError("");
     setSubmitting(true);
     try {
-      const { error: dbError } = await supabase.from("leads" as any).insert({
+      const { data: inserted, error: dbError } = await supabase.from("leads" as any).insert({
         card_id: cardId,
         full_name: fullName.trim(),
         phone: phone.trim(),
         email: email.trim() || null,
         company_name: companyName.trim() || null,
         source,
-      } as any);
+      } as any).select("id").single();
       if (dbError) throw dbError;
       setSuccess(true);
+
+      // Fire-and-forget: send a "thanks for connecting" email and/or push to
+      // the card owner's HubSpot if they've connected one. Never blocks or
+      // fails the actual lead-capture UX — errors are swallowed here.
+      if ((inserted as any)?.id) {
+        supabase.functions.invoke("handle-new-lead", { body: { leadId: (inserted as any).id } }).catch(() => {});
+      }
+
       setTimeout(() => {
         onSuccess();
         onClose();

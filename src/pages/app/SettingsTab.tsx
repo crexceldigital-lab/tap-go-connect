@@ -4,20 +4,24 @@ import { motion } from "framer-motion";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import UpgradeModal from "@/components/UpgradeModal";
-import { User, Crown, LogOut, ChevronRight, Shield, Bell, HelpCircle, Mail } from "lucide-react";
+import HubSpotConnectModal from "@/components/HubSpotConnectModal";
+import { User, Crown, LogOut, ChevronRight, Shield, Bell, HelpCircle, Mail, Link2 } from "lucide-react";
 
 const SettingsTab = () => {
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
   const [upgradeOpen, setUpgradeOpen] = useState(false);
+  const [hubspotOpen, setHubspotOpen] = useState(false);
+  const [hubspotConnected, setHubspotConnected] = useState(false);
   const [profile, setProfile] = useState<{ full_name: string | null; email: string | null } | null>(null);
 
   useEffect(() => {
     if (!user) return;
-    supabase.from("profiles").select("full_name, email").eq("user_id", user.id).single().then(({ data }) => {
+    supabase.from("profiles").select("full_name, email, hubspot_sync_enabled").eq("user_id", user.id).single().then(({ data }) => {
       setProfile(data);
+      setHubspotConnected(!!(data as any)?.hubspot_sync_enabled);
     });
-  }, [user]);
+  }, [user, hubspotOpen]);
 
   const handleLogout = async () => {
     await signOut();
@@ -37,6 +41,12 @@ const SettingsTab = () => {
       items: [
         { icon: Crown, label: "Upgrade to Pro", action: () => setUpgradeOpen(true), accent: true },
         { icon: Shield, label: "Manage Plan", action: () => setUpgradeOpen(true) },
+      ],
+    },
+    {
+      title: "Integrations",
+      items: [
+        { icon: Link2, label: hubspotConnected ? "HubSpot CRM — Connected" : "Connect HubSpot CRM", action: () => setHubspotOpen(true), accent: hubspotConnected },
       ],
     },
     {
@@ -109,6 +119,7 @@ const SettingsTab = () => {
       </button>
 
       <UpgradeModal open={upgradeOpen} onClose={() => setUpgradeOpen(false)} />
+      <HubSpotConnectModal open={hubspotOpen} onClose={() => setHubspotOpen(false)} />
     </div>
   );
 };

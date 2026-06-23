@@ -5,6 +5,7 @@ import CardPreview, { CardData } from "@/components/CardPreview";
 import LeadCaptureModal from "@/components/LeadCaptureModal";
 import { useCardTracking } from "@/hooks/useCardTracking";
 import { useLeadGate } from "@/hooks/useLeadGate";
+import { downloadVCard } from "@/lib/vcard";
 import { Loader2 } from "lucide-react";
 
 const PublicCard = () => {
@@ -23,56 +24,76 @@ const PublicCard = () => {
     if (!slug) return;
     const fetchCard = async () => {
       const { data, error } = await supabase
-        .rpc("get_public_card_by_slug" as any, { _slug: slug })
-        .maybeSingle();
+        .from("cards")
+        .select("*")
+        .eq("slug", slug)
+        .eq("is_published", true)
+        .single();
 
-      const row: any = data;
-      if (error || !row) {
+      if (error || !data) {
         setNotFound(true);
       } else {
-        setCardId(row.id);
+        setCardId(data.id);
         setCard({
-          full_name: row.full_name || "",
-          job_title: row.job_title || "",
-          company_name: row.company_name || "",
-          avatar_url: row.avatar_url || "",
-          logo_url: row.logo_url || "",
-          logo_position: row.logo_position,
-          phone: row.phone || "",
-          email: row.email || "",
-          website: row.website || "",
-          instagram: row.instagram || "",
-          linkedin: row.linkedin || "",
-          twitter: row.twitter || "",
-          whatsapp: row.whatsapp || "",
-          primary_color: row.primary_color,
-          secondary_color: row.secondary_color,
-          background_style: row.background_style,
-          profile_image_style: row.profile_image_style,
-          profile_image_border: row.profile_image_border,
-          button_style: row.button_style,
-          button_fill: row.button_fill,
-          button_shadow: row.button_shadow,
-          card_layout: row.card_layout,
-          font_style: row.font_style,
-          card_theme: row.card_theme || "light",
-          show_save_contact: row.show_save_contact,
-          show_call: row.show_call,
-          show_email: row.show_email,
-          show_whatsapp: row.show_whatsapp,
-          show_book_appointment: row.show_book_appointment,
-          show_navigate: row.show_navigate,
+          full_name: data.full_name || "",
+          job_title: data.job_title || "",
+          company_name: data.company_name || "",
+          avatar_url: data.avatar_url || "",
+          logo_url: data.logo_url || "",
+          logo_position: data.logo_position,
+          phone: data.phone || "",
+          email: data.email || "",
+          website: data.website || "",
+          bio: (data as any).bio || "",
+          address: (data as any).address || "",
+          department: (data as any).department || "",
+          pronouns: (data as any).pronouns || "",
+          secondary_phone: (data as any).secondary_phone || "",
+          secondary_email: (data as any).secondary_email || "",
+          instagram: data.instagram || "",
+          linkedin: data.linkedin || "",
+          twitter: data.twitter || "",
+          whatsapp: data.whatsapp || "",
+          facebook: (data as any).facebook || "",
+          tiktok: (data as any).tiktok || "",
+          youtube: (data as any).youtube || "",
+          github: (data as any).github || "",
+          behance: (data as any).behance || "",
+          dribbble: (data as any).dribbble || "",
+          telegram: (data as any).telegram || "",
+          snapchat: (data as any).snapchat || "",
+          threads: (data as any).threads || "",
+          custom_links: ((data as any).custom_links as any) || [],
+          attachments: ((data as any).attachments as any) || [],
+          social_icons: ((data as any).social_icons as Record<string, string>) || {},
+          social_display_style: ((data as any).social_display_style as "icons" | "buttons" | "compact") || "icons",
+          primary_color: data.primary_color,
+          secondary_color: data.secondary_color,
+          background_style: data.background_style,
+          profile_image_style: data.profile_image_style,
+          profile_image_border: data.profile_image_border,
+          button_style: data.button_style,
+          button_fill: data.button_fill,
+          button_shadow: data.button_shadow,
+          card_layout: data.card_layout,
+          font_style: data.font_style,
+          card_theme: (data as any).card_theme || "light",
+          show_save_contact: data.show_save_contact,
+          show_call: data.show_call,
+          show_email: data.show_email,
+          show_whatsapp: data.show_whatsapp,
+          show_book_appointment: data.show_book_appointment,
+          show_navigate: data.show_navigate,
         });
-        // Increment views via controlled RPC
+        // Increment views
         try {
-          await supabase.rpc("increment_card_view" as any, { _card_id: row.id });
+          await supabase.from("cards").update({ views_count: (data.views_count || 0) + 1 } as any).eq("id", data.id);
         } catch {}
       }
       setLoading(false);
     };
     fetchCard();
   }, [slug]);
-
 
   // Track page view once card is loaded
   useEffect(() => {
@@ -81,10 +102,24 @@ const PublicCard = () => {
 
   const executeAction = useCallback((type: string, href?: string) => {
     trackEvent(`click_${type}`);
+    if (type === "save_contact" && card) {
+      downloadVCard({
+        full_name: card.full_name,
+        job_title: card.job_title,
+        company_name: card.company_name,
+        phone: card.phone,
+        secondary_phone: card.secondary_phone,
+        email: card.email,
+        secondary_email: card.secondary_email,
+        website: card.website,
+        address: card.address,
+      });
+      return;
+    }
     if (href) {
       window.open(href, "_blank", "noopener,noreferrer");
     }
-  }, [trackEvent]);
+  }, [trackEvent, card]);
 
   const handleActionClick = useCallback((actionType: string, href?: string) => {
     if (shouldGate) {

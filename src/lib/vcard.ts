@@ -107,3 +107,62 @@ export const parseVCard = (raw: string): ParsedVCard => {
 /** Returns true if the file looks like a vCard based on its name or content. */
 export const looksLikeVCard = (filename: string, content: string) =>
   filename.toLowerCase().endsWith(".vcf") || content.trim().toUpperCase().startsWith("BEGIN:VCARD");
+
+// ---------------------------------------------------------------------------
+// vCard generation (the reverse direction) — builds a downloadable .vcf
+// from a published card, so visitors can save the card owner straight to
+// their phone's native contacts app with one tap.
+// ---------------------------------------------------------------------------
+
+export interface VCardSource {
+  full_name: string;
+  job_title?: string;
+  company_name?: string;
+  phone?: string;
+  secondary_phone?: string;
+  email?: string;
+  secondary_email?: string;
+  website?: string;
+  address?: string;
+  avatar_url?: string;
+}
+
+const escapeVCardValue = (v: string) => v.replace(/\\/g, "\\\\").replace(/,/g, "\\,").replace(/;/g, "\\;").replace(/\n/g, "\\n");
+
+/** Builds a vCard 3.0 text block from a card's public data. */
+export const generateVCardText = (card: VCardSource): string => {
+  const lines = ["BEGIN:VCARD", "VERSION:3.0"];
+  const name = card.full_name || "Contact";
+  lines.push(`FN:${escapeVCardValue(name)}`);
+  const parts = name.trim().split(/\s+/);
+  const given = parts.shift() || "";
+  const family = parts.join(" ");
+  lines.push(`N:${escapeVCardValue(family)};${escapeVCardValue(given)};;;`);
+
+  if (card.job_title) lines.push(`TITLE:${escapeVCardValue(card.job_title)}`);
+  if (card.company_name) lines.push(`ORG:${escapeVCardValue(card.company_name)}`);
+  if (card.phone) lines.push(`TEL;TYPE=CELL:${escapeVCardValue(card.phone)}`);
+  if (card.secondary_phone) lines.push(`TEL;TYPE=WORK:${escapeVCardValue(card.secondary_phone)}`);
+  if (card.email) lines.push(`EMAIL;TYPE=INTERNET:${escapeVCardValue(card.email)}`);
+  if (card.secondary_email) lines.push(`EMAIL;TYPE=INTERNET,WORK:${escapeVCardValue(card.secondary_email)}`);
+  if (card.website) lines.push(`URL:${escapeVCardValue(card.website)}`);
+  if (card.address) lines.push(`ADR;TYPE=WORK:;;${escapeVCardValue(card.address)};;;;`);
+
+  lines.push("END:VCARD");
+  return lines.join("\r\n");
+};
+
+/** Triggers a browser download of the generated vCard — this is what powers the "Save Contact" / "Add to Phone Contacts" button. */
+export const downloadVCard = (card: VCardSource) => {
+  const text = generateVCardText(card);
+  const blob = new Blob([text], { type: "text/vcard;charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  const safeName = (card.full_name || "contact").trim().replace(/[^a-z0-9]+/gi, "-").toLowerCase();
+  a.download = `${safeName || "contact"}.vcf`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+};

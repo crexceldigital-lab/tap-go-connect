@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import * as XLSX from "xlsx";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -39,18 +40,20 @@ const AdminContacts = () => {
     return l.full_name.toLowerCase().includes(q) || (l.email || "").toLowerCase().includes(q) || l.phone.includes(q);
   });
 
-  const exportCSV = () => {
-    const headers = ["Name", "Phone", "Email", "Company", "Source", "Date"];
-    const rows = filtered.map((l) => [
-      l.full_name, l.phone, l.email || "", l.company_name || "", l.source, new Date(l.created_at).toLocaleDateString()
-    ]);
-    const csv = [headers.join(","), ...rows.map((r) => r.join(","))].join("\n");
-    const blob = new Blob([csv], { type: "text/csv" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "leads.csv";
-    a.click();
+  const exportExcel = () => {
+    const rows = filtered.map((l) => ({
+      Name: l.full_name,
+      Phone: l.phone,
+      Email: l.email || "",
+      Company: l.company_name || "",
+      Source: l.source,
+      Date: new Date(l.created_at).toLocaleDateString(),
+    }));
+    const worksheet = XLSX.utils.json_to_sheet(rows);
+    worksheet["!cols"] = [{ wch: 22 }, { wch: 16 }, { wch: 26 }, { wch: 22 }, { wch: 12 }, { wch: 12 }];
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Leads");
+    XLSX.writeFile(workbook, `leads-${new Date().toISOString().slice(0, 10)}.xlsx`);
   };
 
   if (loading) {
@@ -65,8 +68,8 @@ const AdminContacts = () => {
           <p className="text-muted-foreground text-sm">{leads.length} total leads</p>
         </div>
         <div className="flex items-center gap-3">
-          <Button variant="outline" size="sm" onClick={exportCSV}>
-            <Download className="h-4 w-4 mr-1" /> Export CSV
+          <Button variant="outline" size="sm" onClick={exportExcel}>
+            <Download className="h-4 w-4 mr-1" /> Export Excel
           </Button>
           <div className="flex items-center gap-2 bg-background rounded-lg px-3 py-2 border">
             <Search className="h-4 w-4 text-muted-foreground" />
