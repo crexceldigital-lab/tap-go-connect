@@ -17,8 +17,8 @@ const SettingsTab = () => {
 
   useEffect(() => {
     if (!user) return;
-    supabase.from("profiles").select("full_name, email, hubspot_sync_enabled").eq("user_id", user.id).single().then(({ data }) => {
-      setProfile(data);
+    supabase.from("profiles").select("full_name, email").eq("user_id", user.id).single().then(({ data }) => {
+      setProfile(data as any);
       setHubspotConnected(!!(data as any)?.hubspot_sync_enabled);
     });
   }, [user, hubspotOpen]);
